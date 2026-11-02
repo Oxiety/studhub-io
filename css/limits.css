@@ -1,0 +1,16 @@
+/* Защита вёрстки от длинного текста: переносим слова, режем переполнение */
+body { overflow-wrap: break-word; }
+p, h1, h2, h3, h4, h5, h6, li, td, th, label, small, b, span, a, div { overflow-wrap: break-word; }
+.logo-text, .btn-create, .btn-submit, .tab-btn, .nav-item, .badge, code, pre { overflow-wrap: normal; }
+pre, code { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
+/* flex-детям разрешаем сжиматься — иначе длинное слово растягивает карточку */
+.post-card, .project-card, .funding-project-card, .disc-card, .comment, .setting-row, .profile-grid > *, .card { min-width: 0; }
+.layout > *, .main-content > *, .view > * { min-width: 0; }
+.form-input, .form-textarea, .form-select, .pill-input, .composer-input { max-width: 100%; min-width: 0; }
+.form-textarea { resize: vertical; max-height: 60vh; }
+/* названия и имена — в одну/две строки с многоточием */
+.user-name, .search-result-title, .search-result-sub, .asset-name, .project-card .project-name, .notif-text { overflow: hidden; text-overflow: ellipsis; }
+.post-title, .funding-title, .disc-title, .project-name, .page-title { overflow-wrap: anywhere; word-break: break-word; hyphens: manual; }
+.comment > div, .post-text, .disc-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+.char-counter { text-align: right; font-size: 11px; color: var(--muted); margin-top: 4px; }
+.char-counter.warn { color: #d94c4c; font-weight: 600; }

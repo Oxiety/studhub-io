@@ -1,0 +1,45 @@
+/* Страница и окно «Правила платформы». Цвета берутся из theme.css, поэтому тёмная тема и акцент работают сами. */
+.rules-page { max-width: 860px; }
+.rules-page .page-title { margin-bottom: 8px; }
+.rules-edition { display: inline-block; font-size: 12px; font-weight: 600; color: var(--muted); background: var(--surface-3); border-radius: 10px; padding: 3px 10px; margin-bottom: 14px; }
+.rules-lead { font-size: 14px; color: var(--text-2); line-height: 1.6; margin-bottom: 8px; }
+
+.rules-summary { background: var(--accent-soft); border-radius: 16px; padding: 18px 22px; margin-bottom: 16px; }
+.rules-summary h2 { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+.rules-summary ul { list-style: none; display: grid; gap: 8px; }
+.rules-summary li { position: relative; padding-left: 24px; font-size: 14px; line-height: 1.5; color: var(--text); }
+.rules-summary li::before { content: "✓"; position: absolute; left: 0; top: 0; width: 17px; height: 17px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+
+.rules-toc { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.rules-toc button { border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 20px; padding: 6px 12px; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: background .15s, color .15s; }
+.rules-toc button:hover { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.rules-toc button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.rules-section { scroll-margin-top: 80px; }
+.rules-section h2 { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.rules-num { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.rules-list { list-style: none; margin: 0; padding: 0; }
+.rules-list li { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--surface-3); font-size: 14px; line-height: 1.6; color: var(--text); }
+.rules-list li:last-child { border-bottom: none; }
+.rules-n { flex: 0 0 36px; padding-top: 1px; font-size: 12px; font-weight: 700; color: var(--muted-2); font-variant-numeric: tabular-nums; }
+.rules-contact strong { color: var(--accent); }
+
+/* окно на экране входа должно быть выше самого экрана входа (z-index 5000) */
+.rules-modal-overlay { z-index: 6000; }
+.rules-modal { max-width: 760px; }
+.rules-modal .modal-header { position: sticky; top: 0; z-index: 2; background: var(--surface); }
+.rules-modal .modal-footer { position: sticky; bottom: 0; z-index: 2; background: var(--surface); }
+.rules-modal .modal-body { padding: 18px 20px 8px; }
+.rules-modal .settings-card { box-shadow: none; border: 1px solid var(--border); }
+.rules-modal .rules-section { scroll-margin-top: 72px; }
+
+.auth-rules-link { color: var(--accent); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.auth-rules-link:hover { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .rules-summary { padding: 16px; }
+  .rules-list li { gap: 8px; }
+  .rules-n { flex-basis: 30px; }
+  .rules-modal .modal-body { padding: 14px 12px 4px; }
+  .rules-section { scroll-margin-top: 76px; }
+}

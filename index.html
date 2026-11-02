@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2d8a7a">
+<meta name="description" content="StudHub — краудфандинг студенческих проектов">
+<meta property="og:title" content="StudHub">
+<meta property="og:description" content="Краудфандинг студенческих проектов">
+<meta property="og:type" content="website">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="StudHub">
+<title>StudHub</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fontsource-inter@5.0.0/index.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/settings.css">
+<link rel="stylesheet" href="css/wallet.css">
+<link rel="stylesheet" href="css/auth.css">
+<link rel="stylesheet" href="css/project.css">
+<link rel="stylesheet" href="css/rules.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/limits.css">
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="css/polish.css">
+<link rel="stylesheet" href="css/edit-profile.css">
+<script src="js/theme-init.js"></script>
+</head>
+<body>
+
+<header class="header">
+<div class="header-left">
+<button class="burger" id="burgerBtn" onclick="toggleMobileMenu()" aria-label="Меню"><svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></button>
+<a class="logo" onclick="switchView('home')">
+<div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg></div>
+<div class="logo-text">Stud<span>Hub</span></div>
+</a>
+</div>
+<div class="header-center">
+<div class="search-bar">
+<svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+<input type="text" id="searchInput" placeholder="Поиск по StudHub..." data-i18n-ph="hdr.search" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search" inputmode="search">
+</div>
+<button type="button" class="search-close" id="searchClose" onclick="closeMobileSearch()" aria-label="Закрыть поиск">Отмена</button>
+<div class="search-results" id="searchResults"></div>
+</div>
+<div class="header-right">
+<button type="button" class="header-icon search-toggle" id="searchToggle" onclick="openMobileSearch()" aria-label="Поиск"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></button>
+<div class="wallet-chip" id="walletChip" onclick="switchView('wallet')" title="Кошелёк"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8z"/></svg><span id="walletChipAmount">0 ₽</span></div>
+<button class="btn-create" id="btnCreateProject">
+<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+<span data-i18n="hdr.create">Создать проект</span>
+</button>
+<div class="header-icon sb-mobile-only" id="chatIcon" role="button" tabindex="0" aria-label="Чат" onclick="openChat()" onkeydown="if(event.key==='Enter')openChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
+<div class="header-icon" id="notifIcon" style="position:relative;">
+<svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
+<span class="badge" id="notifBadge" style="display:none">0</span>
+<div class="notif-dropdown" id="notifDropdown">
+<div class="notif-header" data-i18n="hdr.notifs">Уведомления</div>
+<div id="notifList"></div>
+</div>
+</div>
+<div class="user-profile" id="userProfile" style="position:relative;">
+<div class="user-avatar" id="userAvatarHeader">С</div>
+<div class="user-info">
+<div class="user-name" id="userNameHeader">Студент</div>
+<div class="user-role">Студент <span class="dropdown-arrow">▾</span></div>
+</div>
+<div class="dropdown" id="profileDropdown">
+<div class="dropdown-email" id="dropdownEmail"></div>
+<a class="dropdown-item" onclick="showMyProfile()"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span data-i18n="menu.profile">Мой профиль</span></a>
+<a class="dropdown-item" onclick="handleMenuAction('settings')"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg><span data-i18n="menu.settings">Настройки</span></a>
+<a class="dropdown-item" onclick="handleMenuAction('switch')"><svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg><span data-i18n="menu.switch">Сменить аккаунт</span></a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item danger" onclick="handleMenuAction('logout')"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg><span data-i18n="menu.logout">Выйти</span></a>
+</div>
+</div>
+</div>
+</header>
+
+<div class="layout">
+<aside class="sidebar-left">
+<a class="nav-item active" id="nav-home" onclick="switchView('home')"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span data-i18n="nav.home">Главная</span></a>
+<a class="nav-item" id="nav-communities" onclick="switchView('communitylist')"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><span data-i18n="nav.communities">Сообщества</span></a>
+<a class="nav-item" id="nav-discussions" onclick="switchView('discussions')"><svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg><span data-i18n="nav.discussions">Обсуждения</span></a>
+<a class="nav-item" id="nav-myprojects" onclick="switchView('myprojects')"><svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg><span data-i18n="nav.myprojects">Мои проекты</span><span class="count" id="myProjectsCount">0</span></a>
+<a class="nav-item" id="nav-assets" onclick="switchView('assets')"><svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-5 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4 8h-8v-1c0-1.33 2.67-2 4-2s4 .67 4 2v1z"/></svg><span data-i18n="nav.files">Мои файлы</span></a>
+<a class="nav-item" id="nav-subs" onclick="switchView('subs')"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg><span data-i18n="nav.subs">Подписки</span></a>
+<a class="nav-item" id="nav-wallet" onclick="switchView('wallet')"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg><span data-i18n="nav.wallet">Кошелёк</span><span class="count" id="navWalletBalance">0 ₽</span></a>
+<a class="nav-item" id="nav-settings" onclick="switchView('settings')"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg><span data-i18n="nav.settings">Настройки</span></a>
+<a class="nav-item" id="installBtn" style="display:none" onclick="installApp()"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg><span>Установить приложение</span></a>
+<div class="section-label sb-mobile-only">Под рукой</div>
+<a class="nav-item sb-mobile-only" onclick="closeMobileMenu();openChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg><span>Чат</span></a>
+<a class="nav-item sb-mobile-only" onclick="closeMobileMenu();quickLink('schedule')"><svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg><span>Расписание и зачёты</span></a>
+<a class="nav-item sb-mobile-only" onclick="quickLink('career')"><svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span>Карьера и стажировки</span></a>
+<a class="nav-item sb-mobile-only" onclick="closeMobileMenu();quickLink('help')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 10.9 13 11.5 13 13h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg><span>Помощь и поддержка</span></a>
+<div class="section-label" data-i18n="nav.mycomm">Мои сообщества</div>
+<div id="sbCommunities"></div>
+<a class="all-communities" onclick="switchView('communitylist')" data-i18n="nav.allcomm">Все сообщества ↗</a>
+<div class="sidebar-footer"><div class="footer-links"><a onclick="switchView('settings')" style="cursor:pointer" data-i18n="nav.settings">Настройки</a> · <a href="#">Помощь и поддержка</a><br><a href="#">О StudHub</a> · <a href="#" onclick="openRules(event)" data-i18n="nav.rules">Правила</a> · <a href="#">Конфиденциальность</a><br>© StudHub, 2026</div></div>
+</aside>
+
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeMobileMenu()"></div>
+<main class="main-content">
+
+<div class="view" id="view-rules">
+<div class="rules-page">
+<div class="breadcrumb" id="rulesCrumb">Документы</div><h1 class="page-title" id="rulesTitle">Правила платформы</h1>
+<div class="rules-edition" id="rulesEdition"></div>
+<p class="rules-lead" id="rulesLead"></p>
+<div id="rulesBody"></div>
+</div>
+</div>
+
+<div class="view" id="view-project"><div id="projectPage"></div></div>
+
+<div class="view active" id="view-home">
+<div class="breadcrumb">StudHub · краудфандинг</div>
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px;">
+<div><h1 class="page-title" style="margin-bottom:8px;" data-i18n="home.title">Проекты, которым нужна поддержка</h1><p data-i18n="home.lead" style="font-size:14px;color:var(--muted);line-height:1.6;max-width:720px;margin-bottom:18px;">Помогай студенческим идеям становиться реальностью. Поддержанные проекты появятся во вкладке «Подписки».</p></div>
+</div>
+<div class="composer is-link" style="margin-bottom:22px;" role="button" tabindex="0" onclick="openCreateModal()" onkeydown="if(event.key==='Enter')openCreateModal()"><div class="composer-avatar" id="composerAvatar">С</div><div style="flex:1;font-size:14px;color:var(--muted);" data-i18n="home.idea">Есть идея, которой нужно финансирование?</div><button class="btn-submit" type="button" data-i18n="home.place">Разместить проект</button></div>
+<div class="section-block"><div class="section-header"><h2 class="section-title" data-i18n="home.seeking">Ищут финансирование</h2><span style="font-size:12px;color:var(--muted);">Проекты студентов</span></div><div class="projects-grid" id="fundraisingProjectsGrid"></div></div>
+</div>
+
+<div class="view" id="view-discussions">
+<div class="breadcrumb">Обсуждения</div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;"><h1 class="page-title" style="margin-bottom:0;">Обсуждения</h1><button class="btn-create" onclick="openDiscModal()">＋ Новое обсуждение</button></div>
+<div class="composer"><input class="composer-input" id="discSearch" placeholder="Поиск по обсуждениям..." oninput="discQ=this.value.trim().toLowerCase();renderDiscussions()" maxlength="100"></div>
+<div class="tabs-row" id="discCats"></div>
+<div class="tabs-row">
+<button class="tab-btn active" onclick="setDisc('sort','hot',this)">🔥 Горячие</button>
+<button class="tab-btn" onclick="setDisc('sort','new',this)">Новые</button>
+<button class="tab-btn" onclick="setDisc('sort','top',this)">Топ</button>
+<button class="tab-btn" onclick="setDisc('sort','comments',this)">Больше комментариев</button>
+<button class="tab-btn" data-mine="1" onclick="setDisc('mine',0,this)">Мои</button>
+</div>
+<div id="discList"></div>
+</div>
+
+<div class="view" id="view-community">
+<div class="community-cover"><div class="community-cover-inner"><div class="cover-sky"></div><div class="cover-building"><div class="cover-building-text"></div></div><div class="cover-welcome"></div><div class="cover-logo"></div><button class="cover-edit"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Изменить обложку</button></div></div>
+<div class="community-info"><div class="community-info-top"><div class="community-title-section"><div class="community-name"></div><div class="community-fullname"></div><div class="community-location"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div></div><div class="community-actions"><button class="btn-joined"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Вы участник</button><button class="btn-invite"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Пригласить друзей</button></div></div><div class="community-stats"><div class="community-stat"><span class="community-stat-num">0</span><span class="community-stat-label">участника</span></div><div class="community-stat"><span class="community-stat-num">0</span><span class="community-stat-label">онлайн</span></div><div class="community-stat-online"><span class="online-dot"></span><span style="font-size:13px;color:var(--muted);"></span></div></div></div>
+<div style="background:var(--surface);border-radius:16px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.06);"><h2 class="section-title" style="margin-bottom:12px;">О сообществе</h2><p style="font-size:14px;color:var(--text-2);line-height:1.6;margin-bottom:12px;"></p></div>
+<div id="communityDetailPosts" style="margin-top:20px"></div>
+</div>
+
+<div class="view" id="view-communitylist">
+<div class="breadcrumb">Сообщества</div>
+<h1 class="page-title">Сообщества</h1>
+<div class="composer"><div class="composer-avatar">С</div><input class="composer-input" id="communitySearch" placeholder="Найти сообщество..." oninput="renderAllCommunities()" maxlength="100"><div class="composer-actions"><button class="composer-btn add"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button></div></div>
+<div class="tabs-row" id="communityFilters"><button class="tab-btn active" onclick="setCommunityFilter('all',this)">Все</button><button class="tab-btn" onclick="setCommunityFilter('mine',this)">Мои</button><button class="tab-btn" onclick="setCommunityFilter('popular',this)">Популярные</button><button class="tab-btn" onclick="setCommunityFilter('new',this)">Новые</button></div>
+<div class="all-communities-grid" id="allCommunitiesGrid"></div>
+</div>
+
+<div class="view" id="view-myprojects">
+<div class="breadcrumb">Мои проекты</div>
+<div class="my-projects-header"><h1 class="page-title" style="margin-bottom:0;">Мои проекты</h1></div>
+<div class="stats-row"><div class="stat-box"><div class="stat-box-num" id="statTotal">0</div><div class="stat-box-label">Всего проектов</div></div><div class="stat-box"><div class="stat-box-num" id="statActive">0</div><div class="stat-box-label">Активных</div></div><div class="stat-box"><div class="stat-box-num" id="statViews">0</div><div class="stat-box-label">Всего просмотров</div></div><div class="stat-box"><div class="stat-box-num" id="statLikes">0</div><div class="stat-box-label">Всего лайков</div></div></div>
+<div id="myProjectsContainer"></div>
+</div>
+
+<div class="view" id="view-assets">
+<div class="breadcrumb">Мои файлы и материалы</div><h1 class="page-title">Мои файлы</h1>
+<div class="upload-drop"><div><div style="font-weight:700;margin-bottom:5px;">Добавить файлы</div><div style="font-size:13px;color:var(--muted);">Выберите документы, изображения, архивы или другие материалы с устройства.</div></div><label class="btn-create" for="assetFileInput" style="cursor:pointer;">＋ Выбрать файлы</label><input type="file" id="assetFileInput" multiple style="display:none" onchange="handleAssetFiles(this.files)"></div>
+<div class="assets-list" id="assetsList"></div>
+</div>
+
+<div class="view" id="view-subs">
+<div class="breadcrumb">Поддержка проектов</div><h1 class="page-title">Финансируемые проекты</h1>
+<p style="color:var(--muted);font-size:14px;margin:-8px 0 20px;line-height:1.5">Проекты других пользователей, которые вы поддержали финансово.</p>
+<div class="projects-grid" id="fundedProjectsGrid"></div>
+</div>
+
+<div class="view" id="view-wallet">
+<div class="breadcrumb" data-i18n="w.crumb">Финансы</div><h1 class="page-title" data-i18n="w.title">Кошелёк</h1>
+<div class="wallet-hero">
+<div><div class="wallet-hero-label" data-i18n="w.balance">Баланс</div><div class="wallet-hero-amount" id="walletBalance">0 ₽</div></div>
+<button class="btn-topup" onclick="openTopUp()">＋ <span data-i18n="w.topup">Пополнить</span></button>
+</div>
+<div class="wallet-stats">
+<div class="wallet-stat"><b id="walletTopped">0 ₽</b><span data-i18n="w.topped">Всего пополнено</span></div>
+<div class="wallet-stat"><b id="walletSpent">0 ₽</b><span data-i18n="w.spent">Потрачено на поддержку</span></div>
+<div class="wallet-stat"><b id="walletBacked">0</b><span data-i18n="nav.subs">Подписки</span></div>
+</div>
+<div class="section-header" style="margin-bottom:10px"><h2 class="section-title" style="font-size:18px" data-i18n="w.history">История операций</h2></div>
+<div class="tabs-row" id="txFilters">
+<button class="tab-btn active" onclick="setTxFilter('all',this)" data-i18n="w.all">Все</button>
+<button class="tab-btn" onclick="setTxFilter('in',this)" data-i18n="w.in">Пополнения</button>
+<button class="tab-btn" onclick="setTxFilter('out',this)" data-i18n="w.out">Платежи</button>
+</div>
+<div id="txList"></div>
+</div>
+
+<div class="view" id="view-settings">
+<div class="breadcrumb" data-i18n="set.crumb">Персонализация</div><h1 class="page-title" data-i18n="set.title">Настройки</h1>
+
+<section class="settings-card">
+<h2 data-i18n="set.account">Аккаунт</h2>
+<div class="setting-row"><div class="setting-label">Email</div><div style="font-size:14px;color:var(--text-2)" id="accEmail">—</div></div>
+<div class="setting-row"><div class="setting-label" data-i18n="set.acc.since">Аккаунт создан</div><div style="font-size:14px;color:var(--text-2)" id="accSince">—</div></div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+<button class="btn-outline" onclick="openChangePassword()" data-i18n="set.acc.changepw">Сменить пароль</button>
+<button class="btn-outline" onclick="logout()" data-i18n="set.acc.logout">Выйти из аккаунта</button>
+<button class="btn-outline danger" onclick="openDeleteAccount()" data-i18n="set.acc.delete">Удалить аккаунт</button>
+</div>
+</section>
+
+<section class="settings-card">
+<h2 data-i18n="set.appearance">Внешний вид</h2><p class="settings-hint" data-i18n="set.appearance.hint">Тема и цвет интерфейса сохраняются в этом браузере.</p>
+<div class="setting-row"><div class="setting-label" data-i18n="set.theme">Тема</div>
+<div class="segmented" id="themeSeg">
+<button data-theme-val="light" onclick="setTheme('light')" data-i18n="set.theme.light">Светлая</button>
+<button data-theme-val="dark" onclick="setTheme('dark')" data-i18n="set.theme.dark">Тёмная</button>
+<button data-theme-val="system" onclick="setTheme('system')" data-i18n="set.theme.system">Как в системе</button>
+</div></div>
+<div class="setting-row"><div class="setting-label" data-i18n="set.accent">Акцентный цвет</div><div class="swatches" id="accentSwatches"></div></div>
+</section>
+
+<section class="settings-card">
+<h2 data-i18n="set.language">Язык</h2><p class="settings-hint" data-i18n="set.language.hint">Сейчас переведены меню, шапка, кошелёк и настройки.</p>
+<div class="setting-row"><div class="setting-label" data-i18n="set.language.label">Язык интерфейса</div>
+<select class="settings-select" id="langSelect" onchange="setLang(this.value)"><option value="ru">Русский</option><option value="en">English</option></select></div>
+</section>
+
+<section class="settings-card">
+<h2 data-i18n="set.notifs">Уведомления</h2><p class="settings-hint" data-i18n="set.notifs.hint">Выберите, о чём вам сообщать.</p>
+<div id="notifSettings"></div>
+</section>
+
+<section class="settings-card">
+<h2 data-i18n="set.pay">Платежи и приватность</h2>
+<div id="paySettings"></div>
+</section>
+
+<section class="settings-card">
+<h2 data-i18n="set.data">Данные</h2><p class="settings-hint" data-i18n="set.data.hint">Все данные хранятся только в вашем браузере.</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="btn-outline" onclick="exportData()" data-i18n="set.export">Скачать мои данные</button>
+<button class="btn-outline" onclick="resetSettings()" data-i18n="set.reset">Сбросить настройки</button>
+<button class="btn-outline danger" onclick="wipeAllData()" data-i18n="set.wipe">Удалить все данные</button>
+</div>
+</section>
+</div>
+
+<div class="view" id="view-profile">
+<div class="profile-cover"><button class="cover-edit-btn"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Изменить обложку</button></div>
+<div class="profile-info-section">
+<div class="profile-info-top">
+<div style="display:flex;align-items:flex-start;">
+<div class="profile-avatar-large" id="profileAvatarLarge">С</div>
+<div class="profile-details">
+<div class="profile-name-row"><div class="profile-name" id="profileName">Студент</div></div>
+<div class="profile-subtitle" id="profileSubtitle"></div>
+<div class="profile-bio" id="profileBio"></div>
+<div class="profile-joined" id="profileJoined"></div>
+</div>
+</div>
+<div class="profile-edit-section"><button class="btn-edit-profile" onclick="openEditProfileModal()"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Редактировать профиль</button></div>
+</div>
+<div class="profile-stats">
+<div class="stat-item"><span class="stat-num" id="profilePostsCount">0</span><span class="stat-label">публикации</span></div>
+<div class="stat-item"><span class="stat-num" id="profileProjectsCount">0</span><span class="stat-label">проекта</span></div>
+<div class="stat-item"><span class="stat-num" id="statFollowers">0</span><span class="stat-label">подписчиков</span></div>
+<div class="stat-item"><span class="stat-num" id="statFollowing">0</span><span class="stat-label">подписок</span></div>
+<div class="stat-reviews"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span id="statReviews">0</span> отзыва</div>
+</div>
+</div>
+<div class="profile-tabs"><button class="profile-tab active" onclick="switchProfileTab(this,'posts')">Публикации <span class="tab-count" id="profileTabPostsCount">0</span></button><button class="profile-tab" onclick="switchProfileTab(this,'projects')">Проекты <span class="tab-count" id="profileTabProjectsCount">0</span></button><button class="profile-tab" onclick="switchProfileTab(this,'saved')">Сохранённое</button></div>
+<div id="profileTabContent"></div>
+<div class="profile-grid">
+<div>
+<div class="profile-card"><div class="profile-card-title">Немного обо мне</div><p style="font-size:14px;color:var(--text-2);line-height:1.6;margin-bottom:12px;" id="profileAboutText"></p></div>
+<div class="profile-card"><div class="profile-card-title">Мой кампус</div><div class="campus-info-row"><div class="campus-info-avatar"></div><div><div class="campus-info-name"></div><div class="campus-info-city"></div></div></div></div>
+</div>
+<div>
+<div class="profile-card"><div class="profile-card-title">Что мне интересно</div><div class="interest-tags" id="profileInterests">Пока не указаны</div></div>
+</div>
+</div>
+</div>
+
+</main>
+
+<aside class="sidebar-right">
+<div class="sidebar-card"><div class="card-header"><div class="card-title">Под рукой</div></div><div class="quick-link" role="button" tabindex="0" onclick="quickLink('schedule')" onkeydown="sbKey(event,'schedule')"><div class="quick-link-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg></div><div class="quick-link-text">Расписание и зачёты</div><div class="quick-link-arrow">›</div></div><div class="quick-link" role="button" tabindex="0" onclick="quickLink('library')" onkeydown="sbKey(event,'library')"><div class="quick-link-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div><div class="quick-link-text">Библиотека и материалы</div><div class="quick-link-arrow">›</div></div><div class="quick-link" role="button" tabindex="0" onclick="quickLink('career')" onkeydown="sbKey(event,'career')"><div class="quick-link-icon"><svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-5 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4 8h-8v-1c0-1.33 2.67-2 4-2s4 .67 4 2v1z"/></svg></div><div class="quick-link-text">Карьера и стажировки</div><div class="quick-link-arrow">›</div></div><div class="quick-link" role="button" tabindex="0" onclick="quickLink('help')" onkeydown="sbKey(event,'help')"><div class="quick-link-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div><div class="quick-link-text">Помощь и поддержка</div><div class="quick-link-arrow">›</div></div></div>
+<div class="sidebar-card"><div class="card-header"><div class="card-title">Свои на связи</div><button class="card-link" onclick="openChat()">Открыть чат</button></div><div id="sbOnline"></div></div>
+<div class="rules-card" role="button" tabindex="0" onclick="openRules(event)" onkeydown="if(event.key==='Enter')openRules(event)"><div class="rules-title">Где уважуха — там и движуха</div><div class="rules-text">Уважай собеседников, проверяй источники и не бойся задавать вопросы. Правила StudHub помогают всем чувствовать себя комфортно.</div><div class="rules-link">Правила платформы ↗</div></div>
+</aside>
+</div>
+
+
+<!-- РАСПИСАНИЕ И ЗАЧЁТЫ -->
+<div class="modal-overlay" id="scheduleModal" onclick="if(event.target===this)closeModal('scheduleModal')"><div class="modal">
+<div class="modal-header"><div class="modal-title">Расписание и зачёты</div><button class="modal-close" onclick="closeModal('scheduleModal')">✕</button></div>
+<div class="modal-body">
+<div class="sb-sch-form">
+<input class="form-input full" id="schTitle" maxlength="80" placeholder="Например: Алгоритмизация, зачёт" onkeydown="if(event.key==='Enter')addScheduleItem()">
+<input class="form-input" id="schDate" type="date">
+<input class="form-input" id="schTime" type="time">
+<select class="form-select" id="schType"><option value="class">Пара</option><option value="exam">Зачёт / экзамен</option></select>
+<button class="btn-submit" onclick="addScheduleItem()">Добавить</button>
+</div>
+<div id="schList"></div>
+</div>
+</div></div>
+
+<!-- ПОМОЩЬ -->
+<div class="modal-overlay" id="helpModal" onclick="if(event.target===this)closeModal('helpModal')"><div class="modal">
+<div class="modal-header"><div class="modal-title">Помощь и поддержка</div><button class="modal-close" onclick="closeModal('helpModal')">✕</button></div>
+<div class="modal-body"><div id="helpFaq"></div></div>
+<div class="modal-footer"><button class="btn-cancel" onclick="closeModal('helpModal')">Закрыть</button><button class="btn-submit" onclick="closeModal('helpModal');openRules(event)">Правила платформы</button></div>
+</div></div>
+
+<!-- ЧАТ -->
+<div class="modal-overlay" id="chatModal" onclick="if(event.target===this)closeModal('chatModal')"><div class="modal" style="max-width:760px">
+<div class="modal-header"><div class="modal-title">Чат</div><button class="modal-close" onclick="closeModal('chatModal')">✕</button></div>
+<div class="sb-chat">
+<div class="sb-chat-side"><div id="chatSearchWrap" style="display:none;padding:2px 2px 8px"><input class="form-input" id="chatSearch" placeholder="Найти студента…" oninput="sbSearchPeople(this.value)" autocomplete="off" style="padding:9px 12px" maxlength="60"><div id="chatFound"></div></div><div id="chatPeople"></div></div>
+<div class="sb-chat-main">
+<div class="sb-chat-head"><b id="chatTitle" onclick="openChatProfile()" title="Открыть профиль"></b><span id="chatSub"></span></div>
+<div class="sb-msgs" id="chatMsgs"></div>
+<div class="sb-note" id="chatNote"></div>
+<div class="sb-chat-input"><input class="form-input" id="chatInput" maxlength="1000" placeholder="Напишите сообщение..." autocomplete="off"><button class="btn-submit" id="chatSend" onclick="sendChatMsg()">Отправить</button></div>
+</div>
+</div>
+</div></div>
+
+<!-- CREATE PROJECT MODAL -->
+<div class="modal-overlay" id="createProjectModal">
+<div class="modal">
+<div class="modal-header"><div class="modal-title">Создать проект</div><button class="modal-close" onclick="closeCreateModal()">✕</button></div>
+<div class="modal-body">
+<div class="form-group"><label class="form-label">Название проекта *</label><input class="form-input" id="projName" placeholder="Например: Карта тихих мест" maxlength="80"></div>
+<div class="form-group"><label class="form-label">Описание</label><textarea class="form-textarea" id="projDesc" placeholder="Расскажите о проекте, его целях и задачах..." maxlength="2000"></textarea></div>
+<div class="form-group"><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><label class="form-label">Цель сбора, ₽ *</label><input class="form-input" id="projGoal" type="number" min="1000" max="1000000" placeholder="Например: 20000"></div><div><label class="form-label">Срок сбора</label><select class="form-select" id="projDays"><option value="14">14 дней</option><option value="30" selected>30 дней</option><option value="45">45 дней</option><option value="60">60 дней</option></select></div></div></div>
+<div class="form-group"><label class="form-label">Категория</label><select class="form-select" id="projCategory"></select></div>
+<div class="form-group"><label class="form-label">Награды за поддержку <span style="font-weight:400;color:var(--muted)">(до 3 уровней, пустую строку можно оставить)</span></label>
+<div class="rw-edit"><div class="rw-row"><input class="form-input" id="rwAmt0" type="number" min="50" max="1000000" placeholder="₽"><input class="form-input" id="rwTitle0" maxlength="60" placeholder="Название награды"><input class="form-input rw-desc" id="rwDesc0" maxlength="140" placeholder="Что получит поддержавший"></div><div class="rw-row"><input class="form-input" id="rwAmt1" type="number" min="50" max="1000000" placeholder="₽"><input class="form-input" id="rwTitle1" maxlength="60" placeholder="Название награды"><input class="form-input rw-desc" id="rwDesc1" maxlength="140" placeholder="Что получит поддержавший"></div><div class="rw-row"><input class="form-input" id="rwAmt2" type="number" min="50" max="1000000" placeholder="₽"><input class="form-input" id="rwTitle2" maxlength="60" placeholder="Название награды"><input class="form-input rw-desc" id="rwDesc2" maxlength="140" placeholder="Что получит поддержавший"></div></div></div>
+<div class="form-group"><label class="form-label">Статус <span style="font-weight:400;color:var(--muted)">(публикуются только «Активные»)</span></label><div style="display:flex;gap:8px;"><button class="tab-btn active" data-status="active" onclick="selectStatus(this)">Активный</button><button class="tab-btn" data-status="draft" onclick="selectStatus(this)">Черновик</button><button class="tab-btn" data-status="done" onclick="selectStatus(this)">Завершён</button></div></div>
+<div class="form-group"><label class="form-label">Теги</label><div class="form-tags" id="tagContainer"><span class="form-tag" data-tag="веб-разработка" onclick="toggleTag(this)">веб-разработка</span><span class="form-tag" data-tag="дизайн" onclick="toggleTag(this)">дизайн</span><span class="form-tag" data-tag="мобильное" onclick="toggleTag(this)">мобильное</span><span class="form-tag" data-tag="бот" onclick="toggleTag(this)">бот</span><span class="form-tag" data-tag="хакатон" onclick="toggleTag(this)">хакатон</span><span class="form-tag" data-tag="учёба" onclick="toggleTag(this)">учёба</span></div></div>
+</div>
+<div class="modal-footer"><button class="btn-cancel" onclick="closeCreateModal()">Отмена</button><button class="btn-submit" onclick="submitProject()">Создать проект</button></div>
+</div>
+</div>
+
+<!-- PROJECT DETAIL MODAL -->
+<div class="modal-overlay" id="projectDetailModal">
+<div class="modal">
+<div class="modal-header"><div class="modal-title" id="detailTitle">Проект</div><button class="modal-close" onclick="closeDetailModal()">✕</button></div>
+<div class="modal-body">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;"><div class="project-card-icon p1" id="detailIcon"></div><div style="flex:1;"><div class="project-card-title" id="detailName">Название</div><div class="project-card-status status-active" id="detailStatus">Активный</div></div></div>
+<p style="font-size:14px;color:var(--text-2);line-height:1.6;" id="detailDesc">Описание проекта</p>
+<div class="project-detail-stats"><div class="project-detail-stat"><div class="project-detail-stat-num" id="detailViews">0</div><div class="project-detail-stat-label">Просмотров</div></div><div class="project-detail-stat"><div class="project-detail-stat-num" id="detailLikes">0</div><div class="project-detail-stat-label">Лайков</div></div><div class="project-detail-stat"><div class="project-detail-stat-num" id="detailComments">0</div><div class="project-detail-stat-label">Комментариев</div></div><div class="project-detail-stat"><div class="project-detail-stat-num" id="detailTeam">1</div><div class="project-detail-stat-label">Участников</div></div></div>
+<div id="detailRate"></div>
+<div class="project-detail-actions">
+<button class="btn-action primary" id="detailOpenBtn" onclick="openPublicPageFromDetail()"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>Открыть</button>
+<button class="btn-action" onclick="editProjectFromDetail()"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Редактировать</button>
+<button class="btn-action" onclick="shareProject()"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>Поделиться</button>
+<button class="btn-action danger" onclick="deleteProjectFromDetail()"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>Удалить</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- EDIT PROFILE MODAL -->
+<div class="modal-overlay" id="editProfileModal" onmousedown="if(event.target===this)closeEditProfileModal()">
+<div class="modal ep-modal" role="dialog" aria-modal="true" aria-labelledby="epTitle">
+<div class="ep-head">
+<div><div class="ep-title" id="epTitle">Редактировать профиль</div><div class="ep-sub">Так вас увидят другие студенты</div></div>
+<button class="modal-close" type="button" onclick="closeEditProfileModal()" aria-label="Закрыть">✕</button>
+</div>
+<div class="ep-body">
+
+<section class="ep-hero">
+<label class="ep-avatar" for="editProfileAvatar" title="Сменить фото">
+<span class="ep-avatar-img" id="epAvatarPreview"></span>
+<span class="ep-avatar-cam"><svg viewBox="0 0 24 24"><path d="M9 3 7.17 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.17L15 3H9zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></span>
+</label>
+<div class="ep-hero-text">
+<div class="ep-hero-name" id="epHeroName">Студент</div>
+<div class="ep-hero-user" id="epHeroUser">@student</div>
+<div class="ep-hero-actions">
+<label class="ep-link" for="editProfileAvatar">Загрузить фото</label>
+<button type="button" class="ep-link ep-link-danger" id="epAvatarReset" onclick="epResetAvatar()" hidden>Отменить</button>
+</div>
+<div class="ep-hint">PNG, JPG, WEBP или GIF до 2 МБ</div>
+</div>
+<input type="file" id="editProfileAvatar" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+</section>
+
+<section class="ep-section">
+<div class="ep-section-title">Основное</div>
+<div class="ep-grid">
+<div class="ep-field">
+<label class="ep-label" for="editProfileName">Имя и фамилия</label>
+<input class="ep-input" id="editProfileName" placeholder="Анна Смирнова" maxlength="40" autocomplete="name">
+<div class="ep-error" id="epNameErr"></div>
+</div>
+<div class="ep-field">
+<label class="ep-label" for="editProfileUsername">Никнейм</label>
+<div class="ep-input-wrap"><span class="ep-prefix">@</span><input class="ep-input ep-has-prefix" id="editProfileUsername" placeholder="username" maxlength="21" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+<div class="ep-error" id="epUsernameErr"></div>
+<div class="ep-hint" id="epUsernameHint">3–20 символов: латиница, цифры, точка и «_»</div>
+</div>
+</div>
+<div class="ep-field">
+<label class="ep-label" for="editProfileBio">О себе <span class="ep-count" id="epBioCount">0/300</span></label>
+<textarea class="ep-input ep-textarea" id="editProfileBio" placeholder="Чем занимаетесь, что делаете, над чем работаете…" maxlength="300" rows="3"></textarea>
+</div>
+</section>
+
+<section class="ep-section">
+<div class="ep-section-title">Учёба</div>
+<div class="ep-grid">
+<div class="ep-field">
+<label class="ep-label" for="epCityInput">Город</label>
+<div class="ep-combo" id="epCityCombo">
+<input class="ep-input ep-combo-input" id="epCityInput" placeholder="Начните вводить город" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="epCityList">
+<svg class="ep-combo-chev" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+<div class="ep-combo-list" id="epCityList" role="listbox"></div>
+</div>
+<div class="ep-error" id="epCityErr"></div>
+</div>
+<div class="ep-field">
+<label class="ep-label" for="epCampusInput">Учебное заведение</label>
+<div class="ep-combo" id="epCampusCombo">
+<input class="ep-input ep-combo-input" id="epCampusInput" placeholder="Сначала выберите город" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="epCampusList" disabled>
+<svg class="ep-combo-chev" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+<div class="ep-combo-list" id="epCampusList" role="listbox"></div>
+</div>
+<div class="ep-error" id="epCampusErr"></div>
+</div>
+</div>
+<div class="ep-field">
+<div class="ep-label">Курс / статус</div>
+<div class="ep-chips" id="epCourses" role="radiogroup" aria-label="Курс"></div>
+</div>
+</section>
+
+<section class="ep-section">
+<div class="ep-section-title">Интересы <span class="ep-count" id="epInterestsCount">0/8</span></div>
+<div class="ep-tags" id="epTags" onclick="document.getElementById('epInterestInput').focus()">
+<input class="ep-tags-input" id="epInterestInput" placeholder="Добавить интерес и нажать Enter" maxlength="24" autocomplete="off">
+</div>
+<div class="ep-suggest" id="epSuggest"></div>
+</section>
+
+</div>
+<div class="ep-foot">
+<button class="btn-cancel" type="button" onclick="closeEditProfileModal()">Отмена</button>
+<button class="btn-submit" type="button" id="epSave" onclick="saveProfile()">Сохранить</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ОБСУЖДЕНИЕ -->
+<div class="modal-overlay" id="discModal"><div class="modal">
+<div class="modal-header"><div class="modal-title">Новое обсуждение</div><button class="modal-close" onclick="closeModal('discModal')">✕</button></div>
+<div class="modal-body">
+<div class="form-group"><label class="form-label">Заголовок *</label><input class="form-input" id="discTitle" maxlength="120" placeholder="О чём хотите поговорить?"></div>
+<div class="form-group"><label class="form-label">Категория</label><select class="form-select" id="discCat"></select></div>
+<div class="form-group"><label class="form-label">Текст</label><textarea class="form-textarea" id="discText" placeholder="Подробности..." maxlength="5000"></textarea></div>
+</div>
+<div class="modal-footer"><button class="btn-cancel" onclick="closeModal('discModal')">Отмена</button><button class="btn-submit" onclick="submitDiscussion()">Опубликовать</button></div>
+</div></div>
+
+<!-- ПОЛНОЦЕННОЕ ОКНО ОБСУЖДЕНИЯ -->
+<div class="modal-overlay disc-thread-overlay" id="discThreadModal" onclick="if(event.target===this)closeModal('discThreadModal')"><div class="modal disc-thread-modal">
+<div class="modal-header"><div><div class="modal-title">Обсуждение</div><div class="disc-thread-subtitle">Тема и ответы участников</div></div><button class="modal-close" onclick="closeModal('discThreadModal')" aria-label="Закрыть">✕</button></div>
+<div class="modal-body disc-thread-modal-body"><div id="discThreadContent"></div></div>
+<div class="disc-thread-composer-wrap"><div class="disc-thread-composer-avatar" id="discThreadAvatar">Я</div><div class="disc-thread-composer"><textarea id="discThreadReply" maxlength="1000" rows="2" placeholder="Напишите развёрнутый ответ…" onkeydown="if((event.ctrlKey||event.metaKey)&&event.key==='Enter')submitDiscReply(activeDiscThread)"></textarea><div class="disc-thread-composer-footer"><span>Будьте уважительны к другим участникам</span><button class="btn-submit" id="discThreadSend" onclick="submitDiscReply(activeDiscThread)">Отправить ответ <span>↗</span></button></div></div></div>
+</div></div>
+
+<!-- ПОСТ В ПРОФИЛЕ -->
+<div class="modal-overlay" id="postModal"><div class="modal">
+<div class="modal-header"><div class="modal-title">Новый пост</div><button class="modal-close" onclick="closeModal('postModal')">✕</button></div>
+<div class="modal-body">
+<div class="form-group"><label class="form-label">Заголовок *</label><input class="form-input" id="postTitle" maxlength="120"></div>
+<div class="form-group"><label class="form-label">Тема</label><select class="form-select" id="postTag"><option>Заметка</option><option>Идея</option><option>Новости</option><option>Вопрос</option></select></div>
+<div class="form-group"><label class="form-label">Текст</label><textarea class="form-textarea" id="postText" maxlength="2000"></textarea></div>
+</div>
+<div class="modal-footer"><button class="btn-cancel" onclick="closeModal('postModal')">Отмена</button><button class="btn-submit" onclick="submitPost()">Опубликовать</button></div>
+</div></div>
+
+
+<!-- ДЕНЕЖНАЯ ПОДДЕРЖКА -->
+<div class="modal-overlay" id="supportModal"><div class="modal">
+<div class="modal-header"><div class="modal-title" id="supportTitle">Поддержать проект</div><button class="modal-close" onclick="closeModal('supportModal')">✕</button></div>
+<div class="modal-body">
+<div class="wallet-line"><span><span data-i18n="w.balance.short">Баланс кошелька: </span><b id="supportBalance">0 ₽</b></span><a onclick="openTopUp()" data-i18n="w.topup">Пополнить</a></div>
+<div id="supportRewards"></div><div class="form-label">Сумма</div><div class="amount-chips" id="amountChips"></div>
+<div class="form-group"><input class="form-input" type="number" min="50" id="supportAmount" max="1000000" placeholder="Или своя сумма, ₽" oninput="syncChips()"></div>
+<div class="form-group"><label class="form-label">Сообщение автору (необязательно)</label><textarea class="form-textarea" id="supportMsg" style="min-height:70px" maxlength="300"></textarea></div>
+<label style="font-size:13px;display:flex;gap:8px;align-items:center;"><input type="checkbox" id="supportAnon"> Поддержать анонимно</label>
+<p style="font-size:12px;color:var(--muted-2);margin-top:12px;line-height:1.5;">Демо-режим: деньги списываются только с виртуального кошелька. Для настоящих платежей нужен платёжный провайдер (ЮKassa, CloudPayments и т.п.) и серверная часть.</p>
+</div>
+<div class="modal-footer"><button class="btn-cancel" onclick="closeModal('supportModal')">Отмена</button><button class="btn-submit" onclick="submitSupport()">Поддержать</button></div>
+</div></div>
+
+
+<!-- ПОПОЛНЕНИЕ КОШЕЛЬКА -->
+<div class="modal-overlay" id="topupModal"><div class="modal">
+<div class="modal-header"><div class="modal-title" data-i18n="w.modal.title">Пополнение кошелька</div><button class="modal-close" onclick="closeModal('topupModal')">✕</button></div>
+<div class="modal-body">
+<div class="form-label" data-i18n="w.amount">Сумма пополнения</div><div class="amount-chips" id="topupChips"></div>
+<div class="form-group"><input class="form-input" type="number" min="100" max="50000" id="topupAmount" placeholder="Или своя сумма, ₽" data-i18n-ph="w.own" oninput="syncTopupChips()"><div class="field-error" id="errAmount"></div></div>
+<div class="form-label" data-i18n="w.method">Способ оплаты</div>
+<div class="method-grid" id="methodGrid">
+<button type="button" class="method-tile active" data-method="card" onclick="pickMethod('card')"><span class="m-ico">💳</span><span data-i18n="w.method.card">Банковская карта</span></button>
+<button type="button" class="method-tile" data-method="sbp" onclick="pickMethod('sbp')"><span class="m-ico">⚡</span><span data-i18n="w.method.sbp">СБП</span></button>
+<button type="button" class="method-tile" data-method="ym" onclick="pickMethod('ym')"><span class="m-ico">👛</span><span data-i18n="w.method.ym">ЮMoney</span></button>
+</div>
+<div id="cardFields" class="card-fields">
+<div class="full"><label class="form-label" data-i18n="w.card.number">Номер карты</label><input class="form-input" id="cardNumber" inputmode="numeric" autocomplete="off" placeholder="0000 0000 0000 0000" maxlength="23" oninput="fmtCardNumber(this)"><div class="field-error" id="errCard"></div></div>
+<div><label class="form-label" data-i18n="w.card.exp">Срок (ММ/ГГ)</label><input class="form-input" id="cardExp" inputmode="numeric" autocomplete="off" placeholder="ММ/ГГ" maxlength="5" oninput="fmtCardExp(this)"><div class="field-error" id="errExp"></div></div>
+<div><label class="form-label" data-i18n="w.card.cvc">CVC</label><input class="form-input" id="cardCvc" inputmode="numeric" autocomplete="off" type="password" placeholder="•••" maxlength="4" oninput="this.value=this.value.replace(/\D/g,'')"><div class="field-error" id="errCvc"></div></div>
+</div>
+<div class="pay-summary"><span data-i18n="w.total">К оплате</span><span id="topupTotal">0 ₽</span></div>
+<p class="demo-note" data-i18n="w.demo">Демо-режим.</p>
+</div>
+<div class="modal-footer"><button class="btn-cancel" onclick="closeModal('topupModal')" data-i18n="common.cancel">Отмена</button><button class="btn-submit" id="topupPayBtn" onclick="submitTopUp()" data-i18n="w.pay">Оплатить</button></div>
+</div></div>
+
+<!-- ВХОД И РЕГИСТРАЦИЯ -->
+<div class="auth-screen" id="authScreen">
+<div class="auth-lang"><select class="settings-select" onchange="setLang(this.value)" aria-label="Language"><option value="ru">Русский</option><option value="en">English</option></select></div>
+<form class="auth-card" id="authForm" onsubmit="submitAuth(event)" novalidate>
+<div class="auth-brand"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg></div><div class="logo-text">Stud<span>Hub</span></div></div>
+<div class="auth-tagline" data-i18n="auth.tagline">Краудфандинг студенческих проектов</div>
+<div class="auth-tabs" id="authTabs">
+<button type="button" data-mode="login" onclick="setAuthMode('login')" data-i18n="auth.login">Вход</button>
+<button type="button" data-mode="register" onclick="setAuthMode('register')" data-i18n="auth.register">Регистрация</button>
+</div>
+<div class="auth-info auth-only-register" id="authMigrate" style="display:none" data-i18n="auth.migrate">Найдены данные, созданные до появления аккаунтов (проекты, кошелёк, комментарии). Они будут привязаны к этому первому аккаунту.</div>
+<div class="auth-field auth-only-register"><label for="authName" data-i18n="auth.name">Имя и фамилия</label><input class="form-input" id="authName" autocomplete="name" maxlength="40" placeholder="Иван Петров"></div>
+<div class="auth-field auth-only-register"><label for="authUsername" data-i18n="auth.username">Юзернейм</label><input class="form-input" id="authUsername" autocomplete="username" maxlength="20" minlength="3" pattern="[a-zA-Z0-9_.]{3,20}" placeholder="student_123" data-i18n-ph="auth.usernamePlaceholder" aria-describedby="authUsernameHint"><div class="setting-desc" id="authUsernameHint" data-i18n="auth.usernameHint">3–20 символов: латиница, цифры, точка и подчёркивание. Без учёта регистра.</div></div>
+<div class="auth-field"><label for="authEmail" data-i18n="auth.email">Email</label><input class="form-input" id="authEmail" type="email" autocomplete="email" maxlength="100" placeholder="you@example.com"></div>
+<div class="auth-field"><label for="authPassword" data-i18n="auth.password">Пароль</label>
+<div class="pw-wrap"><input class="form-input" id="authPassword" type="password" autocomplete="current-password" maxlength="100" oninput="updateStrength()"><button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Show password">👁</button></div>
+<div class="strength auth-only-register"><div class="strength-bar" id="strengthBar" data-level="-1"><span></span></div><span id="strengthText"></span></div>
+<div class="setting-desc auth-only-register" data-i18n="auth.pwrule" style="margin-top:6px">Минимум 8 символов, буквы и цифры</div></div>
+<div class="auth-field auth-only-register"><label for="authPassword2" data-i18n="auth.password2">Повторите пароль</label><div class="pw-wrap"><input class="form-input" id="authPassword2" type="password" autocomplete="new-password" maxlength="100"><button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Show password">👁</button></div></div>
+<label class="auth-check auth-only-login"><input type="checkbox" id="authRemember" checked><span data-i18n="auth.remember">Запомнить меня на этом устройстве</span></label>
+<a class="auth-forgot auth-only-login backend-only" onclick="forgotPassword()">Забыли пароль?</a>
+<label class="auth-check auth-only-register"><input type="checkbox" id="authAgree"><span><span data-i18n="auth.agree">Я принимаю правила и политику конфиденциальности</span> <a class="auth-rules-link" href="#" onclick="openRules(event)" data-i18n="auth.readRules">Читать правила</a></span></label>
+<div class="auth-error" id="authError" role="alert"></div>
+<button class="btn-submit auth-submit" id="authSubmit" type="submit">Войти</button>
+
+</form>
+</div>
+
+<!-- СМЕНА ПАРОЛЯ -->
+<div class="modal-overlay rules-modal-overlay" id="rulesModal" onclick="if(event.target===this)closeModal('rulesModal')"><div class="modal rules-modal" role="dialog" aria-modal="true" aria-labelledby="rulesModalTitle">
+<div class="modal-header"><div class="modal-title" id="rulesModalTitle">Правила платформы</div><button class="modal-close" onclick="closeModal('rulesModal')" aria-label="Close">✕</button></div>
+<div class="modal-body" id="rulesModalBody"></div>
+<div class="modal-footer"><button class="btn-submit" id="rulesModalOk" onclick="closeModal('rulesModal')">Понятно</button></div>
+</div></div>
+
+<div class="modal-overlay" id="changePwModal"><div class="modal">
+<div class="modal-header"><div class="modal-title" data-i18n="set.acc.changepw">Сменить пароль</div><button class="modal-close" onclick="closeModal('changePwModal')">✕</button></div>
+<div class="modal-body">
+<div class="form-group"><label class="form-label" data-i18n="auth.cur">Текущий пароль</label><input class="form-input" type="password" id="cpOld" autocomplete="current-password" maxlength="100"></div>
+<div class="form-group"><label class="form-label" data-i18n="auth.new">Новый пароль</label><input class="form-input" type="password" id="cpNew" autocomplete="new-password" maxlength="100"><div class="setting-desc" data-i18n="auth.pwrule">Минимум 8 символов, буквы и цифры</div></div>
+<div class="form-group"><label class="form-label" data-i18n="auth.password2">Повторите пароль</label><input class="form-input" type="password" id="cpNew2" autocomplete="new-password" maxlength="100"></div>
+<div class="auth-error" id="cpError"></div>
+</div>
+<div class="modal-footer"><button class="btn-cancel" onclick="closeModal('changePwModal')" data-i18n="common.cancel">Отмена</button><button class="btn-submit" onclick="submitChangePassword()" data-i18n="common.save">Сохранить</button></div>
+</div></div>
+
+<!-- УДАЛЕНИЕ АККАУНТА -->
+<div class="modal-overlay" id="deleteAccModal"><div class="modal">
+<div class="modal-header"><div class="modal-title" data-i18n="set.acc.delete">Удалить аккаунт</div><button class="modal-close" onclick="closeModal('deleteAccModal')">✕</button></div>
+<div class="modal-body">
+<p style="font-size:14px;line-height:1.5;margin-bottom:14px" data-i18n="auth.delete.text">Аккаунт и все его данные (проекты, кошелёк, комментарии) будут удалены безвозвратно. Введите пароль для подтверждения.</p>
+<div class="form-group"><input class="form-input" type="password" id="daPassword" autocomplete="current-password" maxlength="100"></div>
+<div class="auth-error" id="daError"></div>
+</div>
+<div class="modal-footer"><button class="btn-cancel" onclick="closeModal('deleteAccModal')" data-i18n="common.cancel">Отмена</button><button class="btn-submit" style="background:#e74c3c" onclick="submitDeleteAccount()" data-i18n="set.acc.delete">Удалить аккаунт</button></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+
+<nav class="bottom-nav" id="bottomNav">
+<a onclick="switchView('home')" data-v="home"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Главная</span></a>
+<a onclick="switchView('discussions')" data-v="discussions"><svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg><span>Обсуждения</span></a>
+<a class="bn-plus" onclick="openCreateModal()"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></a>
+<a onclick="switchView('myprojects')" data-v="myprojects"><svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg><span>Проекты</span></a>
+<a onclick="switchView('wallet')" data-v="wallet"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8z"/></svg><span>Кошелёк</span></a>
+</nav>
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/core.js"></script>
+<script src="js/home-feed.js"></script>
+<script src="js/projects.js"></script>
+<script src="js/edu-data.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/communities.js"></script>
+<script src="js/ratings-comments.js"></script>
+<script src="js/discussions.js"></script>
+<script src="js/profile-posts.js"></script>
+<script src="js/fundraising.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/wallet.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/assets.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/rules.js"></script>
+<script src="js/search.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/backend.js"></script>
+<script src="js/mobile.js"></script>
+<script src="js/limits.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<!-- Вставить в текущий index.html сразу после поля authName и перед полем Email -->
+<div class="auth-field auth-only-register">
+  <label for="authUsername" data-i18n="auth.username">Юзернейм</label>
+  <input class="form-input" id="authUsername" autocomplete="username" maxlength="20" minlength="3"
+         placeholder="student_123" pattern="[A-Za-z0-9_.]{3,20}" aria-describedby="authUsernameHint">
+  <div class="setting-desc" id="authUsernameHint" data-i18n="auth.usernameHint">
+    3–20 символов: латиница, цифры, точка и подчёркивание. Без учёта регистра.
+  </div>
+</div>

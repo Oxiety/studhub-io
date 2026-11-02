@@ -1,0 +1,39 @@
+/* Цветовые переменные: светлая и тёмная темы.
+   Тему переключает атрибут data-theme на <html> (см. js/settings.js). */
+:root {
+  --bg: #eef1f5;
+  --surface: #ffffff;
+  --surface-2: #f7f8fa;
+  --surface-3: #f0f2f5;
+  --hover: #e8ecf1;
+  --border: #e2e5ea;
+  --text: #1a1a2e;
+  --text-2: #555555;
+  --muted: #888888;
+  --muted-2: #aaaaaa;
+  --accent: #2d8a7a;
+  --accent-hover: color-mix(in srgb, var(--accent) 85%, #000);
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  --accent-soft-2: color-mix(in srgb, var(--accent) 24%, var(--surface));
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --bg: #0f1318;
+  --surface: #1a1f26;
+  --surface-2: #151a20;
+  --surface-3: #232a33;
+  --hover: #2a323d;
+  --border: #2c3540;
+  --text: #e6e9ee;
+  --text-2: #b4bcc7;
+  --muted: #8b95a3;
+  --muted-2: #6f7a89;
+  color-scheme: dark;
+}
+input, textarea, select { color: var(--text); }
+input::placeholder, textarea::placeholder { color: var(--muted-2); }
+:root[data-theme="dark"] .modal-overlay { background: rgba(0,0,0,.65); }
+:root[data-theme="dark"] .toast { background: #2a323d; }
+:root[data-theme="dark"] .toast.success { background: var(--accent); }
+:root[data-theme="dark"] .toast.error { background: #e74c3c; }
+:root[data-theme="dark"] .tab-btn.active { background: var(--accent); color: #fff; }

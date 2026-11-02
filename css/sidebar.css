@@ -1,0 +1,48 @@
+/* Правая колонка: рабочие блоки, расписание, помощь, чат */
+.quick-link:focus-visible, .online-member.is-link:focus-visible, .card-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+.online-member.is-link { cursor: pointer; border-radius: 8px; transition: background .15s; }
+.online-member.is-link:hover { background: var(--surface-3); }
+.online-member-avatar { position: relative; }
+.sb-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 24px 12px; line-height: 1.5; }
+.sb-x { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; padding: 6px; border-radius: 6px; }
+.sb-x:hover { background: var(--surface-3); color: #e74c3c; }
+.sb-sch-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+.sb-sch-form .full { grid-column: 1 / -1; }
+.sb-sch-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--surface-3); }
+.sb-sch-item.past { opacity: .5; }
+.sb-faq { border: 1px solid var(--border); border-radius: 10px; padding: 0 14px; margin-bottom: 8px; }
+.sb-faq summary { cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text); padding: 12px 0; }
+.sb-faq p { font-size: 13px; color: var(--text-2); line-height: 1.6; margin: 0 0 12px; }
+.sb-chat { display: grid; grid-template-columns: 220px 1fr; height: min(70vh, 520px); }
+.sb-chat-side { display: block; border-right: 1px solid var(--surface-3); overflow-y: auto; padding: 8px; }
+.sb-person { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 10px; cursor: pointer; }
+.sb-person:hover, .sb-person.active { background: var(--surface-3); }
+.sb-clip { max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-chat-main { display: flex; flex-direction: column; min-width: 0; }
+.sb-chat-head { padding: 12px 18px; border-bottom: 1px solid var(--surface-3); }
+.sb-chat-head b { font-size: 14px; color: var(--text); display: block; }
+.sb-chat-head span { font-size: 11px; color: var(--muted-2); }
+.sb-msgs { flex: 1; overflow-y: auto; padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; }
+.sb-msg { display: flex; flex-direction: column; max-width: 80%; }
+.sb-msg.me { align-self: flex-end; align-items: flex-end; }
+.sb-msg.them { align-self: flex-start; }
+.sb-msg.them .sb-bubble { background: var(--surface-3); color: var(--text); border-radius: 14px 14px 14px 4px; }
+.sb-bubble { background: var(--accent); color: #fff; padding: 8px 12px; border-radius: 14px 14px 4px 14px; font-size: 13px; line-height: 1.45; word-break: break-word; }
+.sb-time { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.sb-note { font-size: 11px; color: var(--muted); padding: 0 18px 6px; }
+.sb-chat-input { display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--surface-3); }
+.sb-chat-input .form-input { flex: 1; }
+@media (max-width: 600px) { .sb-chat { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: 75vh; } .sb-chat-side { display: flex; border-right: none; border-bottom: 1px solid var(--surface-3); overflow-x: auto; } .sb-clip { display: none; } .sb-sch-form { grid-template-columns: 1fr; } }
+
+.sb-chat-head b.sb-link { cursor: pointer; color: var(--accent); }
+.sb-chat-head b.sb-link:hover { text-decoration: underline; }
+
+/* пункты, которые на телефоне заменяют скрытую правую колонку */
+.sb-mobile-only { display: none !important; }
+@media (max-width: 900px) { .header-icon.sb-mobile-only { display: flex !important; } .nav-item.sb-mobile-only { display: flex !important; } .section-label.sb-mobile-only { display: block !important; } }
+@media (max-width: 600px) {
+  .sb-chat-side { display: block; overflow: visible; padding: 6px 8px 0; }
+  #chatPeople { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 6px; }
+  .sb-chat-side .sb-person { flex-shrink: 0; padding: 6px 10px; }
+  .sb-chat-main { min-height: 0; }
+}

@@ -1,0 +1,50 @@
+/* Страница проекта (#/project/<id>), уровни наград, форма создания */
+.pp-back { display:inline-block; font-size:13px; font-weight:600; color:var(--accent); cursor:pointer; margin-bottom:14px; }
+.pp-back:hover { text-decoration:underline; }
+.pp-head { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+.pp-icon { width:64px; height:64px; flex-shrink:0; border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; background:var(--accent-soft); color:var(--accent); }
+.pp-title { margin:0 0 6px !important; overflow-wrap:anywhere; }
+.pp-meta { font-size:13px; color:var(--muted); display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.pp-grid { display:grid; grid-template-columns:minmax(0,1fr) 340px; gap:20px; align-items:start; }
+.pp-card { background:var(--surface); border-radius:16px; padding:22px; box-shadow:0 1px 3px rgba(0,0,0,.06); margin-bottom:16px; }
+.pp-side .pp-card { margin-bottom:0; }
+.pp-sticky { position:sticky; top:84px; }
+.pp-h2 { font-size:16px; font-weight:750; margin-bottom:12px; }
+.pp-text { font-size:14px; line-height:1.7; color:var(--text-2); white-space:pre-line; overflow-wrap:anywhere; }
+.pp-raised { font-size:30px; font-weight:800; color:var(--accent); line-height:1.1; }
+.pp-of { font-size:13px; color:var(--muted); margin-top:4px; }
+.pp-bar { height:10px !important; background:var(--surface-3) !important; margin:14px 0 !important; }
+.pp-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; text-align:center; margin-bottom:16px; }
+.pp-stats div { background:var(--surface-2); border-radius:10px; padding:10px 4px; min-width:0; }
+.pp-stats b { display:block; font-size:15px; overflow-wrap:anywhere; }
+.pp-stats span { font-size:11px; color:var(--muted); }
+.pp-mine { font-size:13px; color:var(--accent); font-weight:600; margin-bottom:12px; }
+.pp-cta { width:100%; padding:14px 24px !important; font-size:15px !important; margin-bottom:10px; }
+.pp-share { width:100%; justify-content:center; }
+.pp-note { font-size:13px; color:var(--text-2); background:var(--surface-2); border-radius:10px; padding:12px; line-height:1.5; margin-bottom:10px; }
+.pp-rewards { display:flex; flex-direction:column; gap:10px; }
+.pp-reward { display:flex; align-items:center; justify-content:space-between; gap:12px; border:1px solid var(--border); border-radius:12px; padding:14px 16px; }
+.pp-reward.got { border-color:var(--accent); background:var(--accent-soft); }
+.pp-reward-amt { font-size:12px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.3px; }
+.pp-reward-title { font-size:15px; font-weight:700; margin:2px 0; overflow-wrap:anywhere; }
+.pp-reward-desc { font-size:13px; color:var(--text-2); line-height:1.5; overflow-wrap:anywhere; }
+.pp-got { font-size:12px; font-weight:700; color:var(--accent); white-space:nowrap; }
+/* уровни наград в окне поддержки */
+#supportRewards { margin-bottom:12px; }
+.sr-row { display:flex; gap:10px; align-items:baseline; border:1px solid var(--border); border-radius:10px; padding:9px 12px; margin-bottom:6px; font-size:13px; cursor:pointer; color:var(--text-2); line-height:1.4; }
+.sr-row b { color:var(--text); white-space:nowrap; }
+.sr-row em { font-style:normal; font-weight:700; color:var(--text); }
+.sr-row.active { border-color:var(--accent); background:var(--accent-soft); }
+/* редактор наград в форме создания проекта */
+.rw-edit { display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+.rw-row { display:grid; grid-template-columns:90px 1fr; gap:6px; }
+.rw-row .rw-desc { grid-column:1 / -1; }
+@media (max-width: 1000px) { .pp-grid { grid-template-columns:1fr; } .pp-sticky { position:static; } .pp-side { order:-1; } }
+@media (max-width: 600px) { .pp-head { gap:12px; } .pp-icon { width:52px; height:52px; font-size:22px; } .pp-card { padding:16px; } .pp-raised { font-size:26px; } .pp-reward { flex-direction:column; align-items:flex-start; } }
+.pp-bar { border-radius:10px; overflow:hidden; }
+.pp-bar span { display:block; height:100%; background:var(--accent); border-radius:10px; }
+/* на странице проекта правая колонка не нужна — отдаём место содержимому */
+body[data-view="project"] .sidebar-right { display:none; }
+body[data-view="project"] .layout { grid-template-columns:260px 1fr; }
+@media (max-width:1200px) { body[data-view="project"] .layout { grid-template-columns:220px 1fr; } }
+@media (max-width:900px) { body[data-view="project"] .layout { grid-template-columns:1fr; } }

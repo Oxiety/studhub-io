@@ -1,0 +1,85 @@
+/* Мобильная версия: выдвижное меню, нижняя панель, компактная шапка */
+html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+a, button, .nav-item, .header-icon, .tab-btn, .search-result-item { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+.burger, .bottom-nav, .drawer-backdrop, .search-toggle, .search-close { display:none; }
+.burger { width:40px; height:40px; border:none; border-radius:50%; background:var(--surface-3); align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+.burger svg { width:22px; height:22px; fill:var(--text-2); }
+.nav-item.active, .bottom-nav a.active { font-weight:700; }
+
+@media (max-width: 900px) {
+  .header { padding:0 12px; gap:8px; }
+  .header-left { gap:8px; flex-shrink:0; }
+  .burger { display:flex; }
+  .logo-text { display:none; }
+  .search-toggle { display:flex; border:none; padding:0; }
+  .search-toggle svg { width:20px; height:20px; fill:var(--text-2); }
+  .header-right { flex-shrink:0; gap:6px; margin-left:auto; }
+  #btnCreateProject, .user-info { display:none; }
+  .user-profile { padding:0; }
+  /* строка поиска скрыта, пока не нажата лупа; тогда закрывает всю шапку */
+  .header-center { display:none; margin:0; max-width:none; }
+  body.search-open .header-center { display:flex; position:absolute; top:0; left:0; right:0; height:100%; padding:0 12px; gap:10px; align-items:center; background:var(--surface); z-index:5; }
+  .search-bar { width:100%; flex:1; min-width:0; padding:0 14px; }
+  .search-bar input { min-width:0; width:100%; font-size:16px; }
+  .search-close { display:block; border:none; background:none; color:var(--accent); font:inherit; font-size:14px; font-weight:600; padding:10px 4px; cursor:pointer; flex-shrink:0; }
+  .search-results { position:absolute; top:calc(100% + 4px); left:12px; right:12px; max-height:calc(100dvh - 140px); max-height:calc(100vh - 140px); -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+  .search-result-item { padding:12px; min-height:48px; }
+  .search-result-info { min-width:0; }
+  .search-result-title, .search-result-sub { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .search-result-type { flex-shrink:0; }
+  .wallet-chip { padding:8px 10px; }
+  .notif-dropdown { position:fixed; top:68px; left:8px; right:8px; width:auto; }
+  .dropdown { right:-4px; }
+
+  /* боковое меню превращается в выдвижную панель */
+  .sidebar-left { display:block !important; position:fixed; top:0; left:0; bottom:0; width:min(300px,85vw); height:100% !important; z-index:900; transform:translateX(-102%); transition:transform .25s ease; box-shadow:none; padding-top:18px; padding-bottom:30px; -webkit-overflow-scrolling:touch; }
+  body.menu-open .sidebar-left { transform:none; box-shadow:6px 0 30px rgba(0,0,0,.3); }
+  .drawer-backdrop { display:block; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:800; opacity:0; pointer-events:none; transition:opacity .25s; }
+  body.menu-open .drawer-backdrop { opacity:1; pointer-events:auto; }
+  body.menu-open { overflow:hidden; }
+
+  /* нижняя панель навигации */
+  .bottom-nav { display:flex; position:fixed; left:0; right:0; bottom:0; z-index:700; background:var(--surface); border-top:1px solid var(--border); padding:6px 4px calc(6px + env(safe-area-inset-bottom)); justify-content:space-around; align-items:center; }
+  .bottom-nav a { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; font-size:10px; color:var(--muted); cursor:pointer; padding:4px 0; min-width:0; -webkit-tap-highlight-color:transparent; }
+  .bottom-nav a svg { width:22px; height:22px; fill:currentColor; }
+  .bottom-nav a.active { color:var(--accent); }
+  .bottom-nav a.bn-plus { flex:0 0 48px; width:48px; height:48px; border-radius:50%; background:var(--accent); color:#fff; justify-content:center; margin:-14px 4px 0; box-shadow:0 4px 12px rgba(0,0,0,.25); }
+  .bottom-nav a.bn-plus svg { width:26px; height:26px; }
+
+  .main-content { padding:16px 14px calc(84px + env(safe-area-inset-bottom)); }
+  .toast { left:12px; right:12px; bottom:calc(80px + env(safe-area-inset-bottom)); text-align:center; }
+  .layout { min-height:0; }
+}
+
+@media (max-width: 600px) {
+  .page-title { font-size:22px; }
+  .modal-overlay { padding:0; align-items:flex-end; }
+  .modal { max-width:none !important; max-height:92vh; border-radius:18px 18px 0 0; }
+  .modal-body { padding:18px 16px; }
+  .modal-header, .modal-footer { padding-left:16px; padding-right:16px; }
+  .modal-footer { position:sticky; bottom:0; background:var(--surface); flex-wrap:wrap; }
+  .project-detail-stats { grid-template-columns:repeat(2,1fr); }
+  .project-detail-actions { flex-wrap:wrap; }
+  .composer { flex-wrap:wrap; }
+  .form-input, .form-textarea, .form-select, .search-bar input { font-size:16px; } /* iOS не приближает страницу при вводе */
+  .funding-footer { flex-wrap:wrap; }
+  .tabs-row { overflow-x:auto; flex-wrap:nowrap; padding-bottom:4px; }
+  .tabs-row .tab-btn { white-space:nowrap; flex-shrink:0; }
+}
+@media (max-width: 600px) {
+  .wallet-chip { display:none; } /* «Кошелёк» есть в нижней панели; иначе шапка не помещается */
+  body { min-height:100vh; min-height:100dvh; }
+  /* iOS увеличивает страницу при фокусе на полях со шрифтом < 16px */
+  input:not([type=checkbox]):not([type=radio]):not([type=range]), textarea, select { font-size:16px !important; }
+  /* ничто не должно раздвигать страницу вширь */
+  .main-content, .view { min-width:0; max-width:100vw; }
+  img, video, svg, canvas, iframe { max-width:100%; }
+  .main-content { overflow-x:hidden; }
+  .modal { max-height:92vh; max-height:92dvh; }
+  .asset-item { padding:14px; gap:10px; }
+  .asset-info { min-width:0; }
+  .asset-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .asset-size { flex-shrink:0; }
+}
+@media (max-width: 380px) { .header { padding:0 8px; gap:4px; } .header-right { gap:4px; } .header-icon { width:36px; height:36px; } .burger { width:36px; height:36px; } .logo-icon { transform:scale(.9); } }
+@media (display-mode: standalone) { .header { padding-top:env(safe-area-inset-top); height:calc(64px + env(safe-area-inset-top)); } body.search-open .header-center { padding-top:env(safe-area-inset-top); } }

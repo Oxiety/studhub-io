@@ -1,0 +1,35 @@
+/* Кошелёк и пополнение */
+.wallet-chip { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 21px; background: var(--accent-soft); color: var(--accent); font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.wallet-chip:hover { background: var(--accent-soft-2); }
+.wallet-hero { background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #1a1a2e)); color: #fff; border-radius: 20px; padding: 26px 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.wallet-hero-label { font-size: 13px; opacity: .85; font-weight: 600; }
+.wallet-hero-amount { font-size: 38px; font-weight: 800; margin-top: 4px; letter-spacing: -.5px; }
+.wallet-hero .btn-topup { background: #fff; color: #1a1a2e; border: none; padding: 12px 26px; border-radius: 24px; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+.wallet-hero .btn-topup:hover { transform: translateY(-1px); }
+.wallet-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.wallet-stat { background: var(--surface); border-radius: 14px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+.wallet-stat b { display: block; font-size: 20px; margin-bottom: 2px; }
+.wallet-stat span { font-size: 12px; color: var(--muted); }
+.tx-row { display: flex; align-items: center; gap: 14px; padding: 13px 16px; background: var(--surface); border-bottom: 1px solid var(--surface-3); }
+.tx-list { border-radius: 14px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+.tx-row:last-child { border-bottom: none; }
+.tx-icon { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; background: var(--accent-soft); }
+.tx-icon.out { background: #fde8e8; }
+.tx-info { flex: 1; min-width: 0; }
+.tx-title { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tx-meta { font-size: 12px; color: var(--muted); }
+.tx-amount { font-weight: 700; font-size: 15px; white-space: nowrap; }
+.tx-amount.in { color: var(--accent); }
+.tx-amount.out { color: #e74c3c; }
+.method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+.method-tile { border: 2px solid var(--border); border-radius: 12px; padding: 12px 6px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 600; background: var(--surface); color: var(--text); font-family: inherit; }
+.method-tile .m-ico { display: block; font-size: 22px; margin-bottom: 4px; }
+.method-tile.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.card-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.card-fields .full { grid-column: 1 / -1; }
+.field-error { color: #e74c3c; font-size: 12px; margin-top: 4px; min-height: 16px; }
+.pay-summary { display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; padding: 12px 0 0; border-top: 1px dashed var(--border); margin-top: 8px; }
+.wallet-line { display: flex; justify-content: space-between; align-items: center; background: var(--accent-soft); border-radius: 10px; padding: 10px 14px; font-size: 13px; margin-bottom: 14px; }
+.wallet-line a { color: var(--accent); font-weight: 700; cursor: pointer; }
+.demo-note { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 12px; }
+@media (max-width: 700px) { .wallet-stats { grid-template-columns: 1fr; } .method-grid { grid-template-columns: 1fr; } }
