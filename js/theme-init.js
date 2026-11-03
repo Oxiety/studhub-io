@@ -2,9 +2,10 @@
 (function () {
   try {
     var s = JSON.parse(localStorage.getItem('studhub_settings') || '{}');
-    // Replace the former default teal with pistachio; preserve any custom accent.
-    if (s.accent && s.accent.toLowerCase() === '#2d8a7a') {
-      s.accent = '#667c40';
+    // Migrate any legacy/foreign accent (pistachio, purple, blue, etc.) to the mint palette.
+    var mintAccents = ['#00e3a0', '#00c98b', '#16dda6', '#28e6b0', '#58f0c2'];
+    if (!mintAccents.includes(String(s.accent || '').toLowerCase())) {
+      s.accent = '#00E3A0';
       localStorage.setItem('studhub_settings', JSON.stringify(s));
     }
     var theme = s.theme || 'light';

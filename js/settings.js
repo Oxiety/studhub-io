@@ -1,11 +1,16 @@
 // Настройки: тема, акцентный цвет, язык, уведомления, платежи, данные.
-const ACCENTS = ['#667c40', '#3b82f6', '#8b5cf6', '#e8590c', '#d6336c'];
+const ACCENTS = ['#00E3A0', '#00C98B', '#16DDA6', '#28E6B0', '#58F0C2'];
 const DEFAULT_SETTINGS = {
-  theme: 'light', accent: '#667c40', lang: 'ru', anonDefault: false, confirmPay: true,
+  theme: 'light', accent: '#00E3A0', lang: 'ru', anonDefault: false, confirmPay: true,
   notif: { badge: true, toast: true, replies: true, donations: true, community: true, invites: true, digest: false },
 };
 function getSettings() {
   const s = lsGet('studhub_settings', {});
+  // Drop accents from older versions (pistachio/purple/blue/etc.); the product palette is mint-only.
+  if (!ACCENTS.includes(String(s.accent || '').toUpperCase())) {
+    s.accent = DEFAULT_SETTINGS.accent;
+    lsSet('studhub_settings', s);
+  }
   return { ...DEFAULT_SETTINGS, ...s, notif: { ...DEFAULT_SETTINGS.notif, ...(s.notif || {}) } };
 }
 function saveSettings(s) { lsSet('studhub_settings', s); }

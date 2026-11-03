@@ -1,0 +1,137 @@
+/* StudHub brand palette: vivid mint/menthol, consistent initials across the entire UI. */
+:root {
+  --accent: #00E3A0;
+  --accent-hover: #00BF84;
+  --accent-contrast: #053A2B;
+  --accent-soft: color-mix(in srgb, var(--accent) 13%, var(--surface));
+  --accent-soft-2: color-mix(in srgb, var(--accent) 25%, var(--surface));
+  --sh-mint-bright: #00E3A0;
+  --sh-avatar-bg: #E2FFF3;
+  --sh-avatar-fg: #007A55;
+  --sh-avatar-ring: rgba(0, 191, 132, .14);
+  /* Legacy color slots intentionally collapse to the same theme color. */
+  --sh-avatar-bg-1: var(--sh-avatar-bg);
+  --sh-avatar-bg-2: var(--sh-avatar-bg);
+  --sh-avatar-bg-3: var(--sh-avatar-bg);
+  --sh-avatar-fg-1: var(--sh-avatar-fg);
+  --sh-avatar-fg-2: var(--sh-avatar-fg);
+  --sh-avatar-fg-3: var(--sh-avatar-fg);
+  --sh-icon-soft-1: var(--sh-avatar-bg);
+  --sh-icon-soft-2: var(--sh-avatar-bg);
+  --sh-icon-soft-3: var(--sh-avatar-bg);
+  --sh-icon-ink-1: var(--sh-avatar-fg);
+  --sh-icon-ink-2: var(--sh-avatar-fg);
+  --sh-icon-ink-3: var(--sh-avatar-fg);
+}
+
+:root[data-theme="dark"] {
+  --accent: #40F5B4;
+  --accent-hover: #1ADDA0;
+  --accent-contrast: #063729;
+  --accent-soft: color-mix(in srgb, var(--accent) 17%, var(--surface));
+  --accent-soft-2: color-mix(in srgb, var(--accent) 30%, var(--surface));
+  --sh-mint-bright: #40F5B4;
+  --sh-avatar-bg: #123B2E;
+  --sh-avatar-fg: #68F8C2;
+  --sh-avatar-ring: rgba(64, 245, 180, .17);
+  --sh-avatar-bg-1: var(--sh-avatar-bg);
+  --sh-avatar-bg-2: var(--sh-avatar-bg);
+  --sh-avatar-bg-3: var(--sh-avatar-bg);
+  --sh-avatar-fg-1: var(--sh-avatar-fg);
+  --sh-avatar-fg-2: var(--sh-avatar-fg);
+  --sh-avatar-fg-3: var(--sh-avatar-fg);
+  --sh-icon-soft-1: var(--sh-avatar-bg);
+  --sh-icon-soft-2: var(--sh-avatar-bg);
+  --sh-icon-soft-3: var(--sh-avatar-bg);
+  --sh-icon-ink-1: var(--sh-avatar-fg);
+  --sh-icon-ink-2: var(--sh-avatar-fg);
+  --sh-icon-ink-3: var(--sh-avatar-fg);
+}
+
+/* All initials avatars share ONE hue family; only background brightness follows the theme.
+   background-color (not background shorthand) preserves users' uploaded avatar photos. */
+.user-avatar,
+.ep-avatar-img,
+.composer-avatar,
+.profile-avatar-large,
+.campus-info-avatar,
+.post-avatar:not(.has-image),
+.online-member-avatar,
+.notif-avatar,
+.team-avatar,
+.sub-avatar,
+.disc-author-avatar,
+.disc-thread-reply-avatar,
+.disc-thread-composer-avatar {
+  background-color: var(--sh-avatar-bg) !important;
+  color: var(--sh-avatar-fg) !important;
+  border-color: color-mix(in srgb, var(--accent) 20%, var(--surface)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 2px 8px var(--sh-avatar-ring) !important;
+}
+
+/* Remove legacy purple/blue/olive category variants from icon badges as well. */
+.post-avatar.purple,
+.post-avatar.blue,
+.post-avatar.green,
+.post-tag.purple,
+.post-tag.blue,
+.post-tag.green,
+.project-card-icon.p1,
+.project-card-icon.p2,
+.project-card-icon.p3,
+.project-card-icon.p4,
+.community-card-icon.i1,
+.community-card-icon.i2,
+.community-card-icon.i3,
+.community-card-icon.i4,
+.community-card-icon.i5,
+.community-card-icon.i6,
+.achievement-icon.purple,
+.achievement-icon.gold,
+.asset-icon.doc {
+  background-color: var(--sh-avatar-bg) !important;
+  color: var(--sh-avatar-fg) !important;
+}
+
+.community-card-cover.c2 {
+  background: linear-gradient(135deg, var(--sh-avatar-bg), color-mix(in srgb, var(--accent) 16%, var(--surface))) !important;
+}
+
+/* Keep bright mint readable on solid accent controls. */
+.btn-create,
+.btn-submit,
+.btn-edit-profile,
+.btn-join,
+.header-chat,
+.nav-item.active,
+.tab-btn.active,
+.profile-tab.active,
+.bottom-nav a.active {
+  text-shadow: none;
+}
+
+:root[data-theme="dark"] .user-avatar,
+:root[data-theme="dark"] .ep-avatar-img,
+:root[data-theme="dark"] .composer-avatar,
+:root[data-theme="dark"] .profile-avatar-large,
+:root[data-theme="dark"] .campus-info-avatar,
+:root[data-theme="dark"] .post-avatar:not(.has-image),
+:root[data-theme="dark"] .online-member-avatar,
+:root[data-theme="dark"] .notif-avatar,
+:root[data-theme="dark"] .team-avatar,
+:root[data-theme="dark"] .sub-avatar,
+:root[data-theme="dark"] .disc-author-avatar,
+:root[data-theme="dark"] .disc-thread-reply-avatar,
+:root[data-theme="dark"] .disc-thread-composer-avatar {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 3px 10px rgba(0,0,0,.20), 0 0 0 1px rgba(57,245,181,.04) !important;
+}
+
+/* Dark lettering on neon-mint fills keeps primary actions crisp and readable. */
+.btn-create, .btn-submit, .btn-edit-profile,
+.project-detail-actions .btn-action.primary,
+.tab-btn.active, .profile-tab.active,
+.bottom-nav a.bn-plus, .logo-icon { color: var(--accent-contrast) !important; }
+.logo-icon svg { fill: var(--accent-contrast) !important; }
+.btn-create svg, .btn-submit svg, .btn-edit-profile svg,
+.project-detail-actions .btn-action.primary svg,
+.bottom-nav a.bn-plus svg { fill: currentColor !important; }
