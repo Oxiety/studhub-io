@@ -11,8 +11,9 @@ if (!getActiveAccount()) {
 } else {
   // Вошли: запускаем приложение с данными этого аккаунта
   updateProfile();
-  renderPosts('top');
+  renderPosts('new');
   renderFundraisingProjects();
+  if (typeof loadHomePosts === 'function') loadHomePosts();
   renderMyProjects();
   updateMyProjectsStats(getProjects());
   renderAllCommunities();

@@ -1,66 +1,141 @@
-// Лента на главной: посты и голосование
+// Главная лента публикаций пользователей.
+// Supabase — общий источник публикаций, localStorage — резервный режим.
 const homePostsData = [];
 const homeVoteState = {};
 const homeOriginalVotes = {};
+let homeFeedLoadingPromise = null;
+let homeFeedSort = 'new';
+
+function homePostInitials(name) {
+  return typeof getInitials === 'function' ? getInitials(name || 'Студент') : String(name || 'С').slice(0, 1).toUpperCase();
+}
+
+function normalizeHomePost(row, profile) {
+  const ts = row.ts || (row.created_at ? Date.parse(row.created_at) : Date.now());
+  const author = row.author || row.author_name || (profile && profile.name) || (row.owner_id && row.owner_id === activeUserId() ? getCurrentUser().name : 'Студент');
+  return {
+    ...row,
+    id: String(row.id),
+    owner_id: row.owner_id || null,
+    title: String(row.title || 'Публикация'),
+    text: String(row.body ?? row.text ?? ''),
+    body: String(row.body ?? row.text ?? ''),
+    tag: String(row.tag || 'Пост'),
+    author,
+    avatarUrl: profile && profile.avatar_url ? profile.avatar_url : (row.avatarUrl || ''),
+    community: row.community || 'Публикации StudHub',
+    avatarClass: 'green',
+    avatarLetter: homePostInitials(author),
+    tagClass: 'green',
+    time: typeof ago === 'function' ? ago(ts) : '',
+    timeSort: Number.isFinite(ts) ? ts : Date.now(),
+    votes: Number(row.votes || 0),
+    comments: Number(row.comments || 0)
+  };
+}
+
+function safeAvatarUrl(value) {
+  try {
+    const url = new URL(String(value || ''), location.href);
+    return /^https?:$/.test(url.protocol) ? url.href : '';
+  } catch (e) { return ''; }
+}
+
+function renderHomePost(post) {
+  const id = String(post.id);
+  const safeId = escapeHtml(id);
+  const author = escapeHtml(post.author || 'Студент');
+  const title = escapeHtml(post.title || 'Публикация');
+  const body = escapeHtml(post.text || '');
+  const tag = escapeHtml(post.tag || 'Пост');
+  const initials = escapeHtml(post.avatarLetter || homePostInitials(post.author));
+  const avatarUrl = safeAvatarUrl(post.avatarUrl);
+  const avatar = avatarUrl
+    ? `<div class="post-avatar green has-image"><img src="${escapeHtml(avatarUrl)}" alt="" loading="lazy"></div>`
+    : `<div class="post-avatar green">${initials}</div>`;
+  const key = 'post-' + id;
+  return `<article class="post-card home-post-card" data-id="${safeId}" data-owner-id="${escapeHtml(post.owner_id || '')}">
+    <div class="post-header">
+      <div class="post-author">${avatar}<div class="post-meta"><span class="post-community">${author}</span><span class="post-info">${escapeHtml(post.time || '')}</span></div></div>
+      <div class="post-header-actions">${typeof postSaveButton === 'function' ? postSaveButton(post) : ''}</div>
+    </div>
+    <div class="post-tag green">${tag}</div>
+    <h2 class="post-title">${title}</h2>
+    ${body ? `<p class="post-text" style="white-space:pre-wrap">${body}</p>` : ''}
+    <div class="post-footer">
+      ${typeof voteBox === 'function' ? voteBox(key, post.votes || 0) : ''}
+      ${typeof commentBtn === 'function' ? commentBtn(key, post.comments || 0) : ''}
+      <span class="post-stat post-share-label"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>Поделиться</span>
+    </div>
+    ${typeof commentsBox === 'function' ? commentsBox(key) : ''}
+  </article>`;
+}
+
 function renderPosts(sortType) {
-const container = document.getElementById('postsContainer');
-if (!container) return;
-let sorted = [...homePostsData];
-if (sortType === 'top') sorted.sort((a, b) => b.votes - a.votes);
-else if (sortType === 'week') sorted.sort((a, b) => b.comments - a.comments);
-else if (sortType === 'new') sorted.sort((a, b) => a.timeSort - b.timeSort);
-container.innerHTML = sorted.map(post => {
-const voteClass = post.votes >= 0 ? 'positive' : 'negative';
-const voteDisplay = post.votes < 0 ? '−' + Math.abs(post.votes) : post.votes;
-const upActive = homeVoteState[post.id] === 'up' ? 'active' : '';
-const downActive = homeVoteState[post.id] === 'down' ? 'active' : '';
-let imageHtml = '';
-if (post.hasImage) {
-imageHtml = '';
+  const container = document.getElementById('postsContainer');
+  if (!container) return;
+  if (sortType) homeFeedSort = sortType;
+  const sorted = [...homePostsData];
+  if (homeFeedSort === 'top') sorted.sort((a, b) => (b.votes || 0) - (a.votes || 0) || b.timeSort - a.timeSort);
+  else sorted.sort((a, b) => b.timeSort - a.timeSort);
+  container.innerHTML = sorted.length
+    ? sorted.map(renderHomePost).join('')
+    : `<div class="empty-state home-posts-empty"><div class="empty-state-icon">✦</div><div class="empty-state-title">Пока нет публикаций</div><div class="empty-state-desc">Здесь появятся посты студентов — поделитесь своей новостью и начните разговор.</div></div>`;
 }
-const starHtml = `<div class="post-stat star-btn" onclick="toggleStar(this)"><svg viewBox="0 0 24 24"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg></div>`;
-const joinHtml = post.hasJoin ? `<button class="btn-join"><svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>Вступить</button><button class="btn-more">···</button>` : `<button class="btn-more">···</button>`;
-const textHtml = post.text ? `<p class="post-text">${post.text}</p>` : '';
-const titleSection = post.hasStar ? `<div style="display:flex;align-items:center;gap:16px;"><div style="flex:1;"><h2 class="post-title" style="margin-bottom:0;">${post.title}</h2></div><div style="width:80px;height:80px;background:#f0e8f8;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="40" height="40" viewBox="0 0 24 24" fill="#8b6ab5"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24l-7.19-.62L12 2z"/></svg></div></div>` : `<h2 class="post-title">${post.title}</h2>`;
-return `<div class="post-card" data-id="${post.id}">
-<div class="post-header"><div class="post-author"><div class="post-avatar ${post.avatarClass}">${post.avatarLetter}</div><div class="post-meta"><span class="post-community">${post.community}</span><span class="post-info">Запостил ${post.author} <span>·</span> ${post.time}</span></div></div><div style="display:flex;align-items:center;gap:8px;">${joinHtml}</div></div>
-<div class="post-tag ${post.tagClass}">${post.tag}</div>
-${titleSection}
-${textHtml}
-${imageHtml}
-<div class="post-footer">
-<div class="vote-control">
-<button class="vote-btn up ${upActive}" onclick="homeVote(this,'up',${post.id})"><svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg></button>
-<span class="vote-count ${voteClass}" id="hvote-${post.id}">${voteDisplay}</span>
-<button class="vote-btn down ${downActive}" onclick="homeVote(this,'down',${post.id})"><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></button>
-</div>
-<div class="post-stat"><svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg>${post.comments} комментария</div>
-<div class="post-stat"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>Поделиться</div>
-${starHtml}
-</div>
-</div>`;
-}).join('');
+
+async function loadHomePosts(force = false) {
+  if (homeFeedLoadingPromise && !force) return homeFeedLoadingPromise;
+  homeFeedLoadingPromise = (async () => {
+    let rows = [];
+    let profiles = [];
+    if (typeof BACKEND !== 'undefined' && BACKEND && typeof sb !== 'undefined' && sb) {
+      try {
+        rows = await ok(need().from('user_posts').select('id, owner_id, title, body, tag, created_at').order('created_at', { ascending: false }).limit(40));
+        const ownerIds = [...new Set((rows || []).map(p => p.owner_id).filter(Boolean))];
+        if (ownerIds.length) {
+          try { profiles = await ok(need().from('public_profiles').select('id, name, avatar_url').in('id', ownerIds)); }
+          catch (profileError) { console.warn('Не удалось загрузить публичные профили авторов ленты', profileError); }
+        }
+      } catch (e) {
+        console.warn('Не удалось загрузить общую ленту публикаций', e);
+        rows = [];
+      }
+    }
+
+    // Резервная копия локальных публикаций полезна при отсутствии сети или миграции.
+    if (!rows.length && typeof getUserPosts === 'function') rows = getUserPosts();
+    const byOwner = new Map((profiles || []).map(p => [p.id, p]));
+    const normalized = (rows || []).map(row => normalizeHomePost(row, byOwner.get(row.owner_id)));
+    homePostsData.splice(0, homePostsData.length, ...normalized);
+    renderPosts(homeFeedSort);
+    return homePostsData;
+  })();
+  try { return await homeFeedLoadingPromise; }
+  finally { homeFeedLoadingPromise = null; }
 }
-function sortPosts(type, btn) { btn.parentElement.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active')); btn.classList.add('active'); renderPosts(type); }
+
+function sortPosts(type, btn) {
+  if (btn && btn.parentElement) {
+    btn.parentElement.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  renderPosts(type);
+}
+
+// Сохраняем старый обработчик на случай, если в браузере осталась старая разметка ленты.
 function homeVote(btn, direction, postId) {
-const control = btn.closest('.vote-control');
-const upBtn = control.querySelector('.up');
-const downBtn = control.querySelector('.down');
-const countEl = control.querySelector('.vote-count');
-const post = homePostsData.find(p => p.id === postId);
-if (homeVoteState[postId] === direction) {
-homeVoteState[postId] = null;
-upBtn.classList.remove('active');
-downBtn.classList.remove('active');
-post.votes = homeOriginalVotes[postId];
-} else {
-homeVoteState[postId] = direction;
-upBtn.classList.remove('active');
-downBtn.classList.remove('active');
-btn.classList.add('active');
-post.votes = homeOriginalVotes[postId] + (direction === 'up' ? 1 : -1);
-}
-const val = post.votes;
-countEl.textContent = val < 0 ? '−' + Math.abs(val) : val;
-countEl.className = 'vote-count ' + (val >= 0 ? 'positive' : 'negative');
+  const control = btn.closest('.vote-control');
+  if (!control) return;
+  const post = homePostsData.find(p => String(p.id) === String(postId));
+  if (!post) return;
+  const upBtn = control.querySelector('.up'), downBtn = control.querySelector('.down'), countEl = control.querySelector('.vote-count');
+  if (homeVoteState[postId] === direction) {
+    homeVoteState[postId] = null; upBtn?.classList.remove('active'); downBtn?.classList.remove('active');
+    post.votes = homeOriginalVotes[postId] ?? post.votes;
+  } else {
+    homeVoteState[postId] = direction; upBtn?.classList.remove('active'); downBtn?.classList.remove('active');
+    btn.classList.add('active'); post.votes = (homeOriginalVotes[postId] ?? post.votes) + (direction === 'up' ? 1 : -1);
+  }
+  const val = post.votes;
+  if (countEl) { countEl.textContent = val < 0 ? '−' + Math.abs(val) : val; countEl.className = 'vote-count ' + (val >= 0 ? 'positive' : 'negative'); }
 }

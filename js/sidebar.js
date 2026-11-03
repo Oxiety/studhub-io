@@ -9,50 +9,9 @@ const SB_FAQ = [
 ];
 const SB_ESC = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-/* ---------- Под рукой ---------- */
-function quickLink(kind) {
-  if (kind === 'schedule') openSchedule();
-  else if (kind === 'library') switchView('assets');
-  else if (kind === 'career') {
-    switchView('discussions');
-    discCat = 'Ищу команду'; discQ = ''; discMine = false;
-    const q = document.getElementById('discSearch'); if (q) q.value = '';
-    document.querySelectorAll('#view-discussions [data-mine]').forEach(b => b.classList.remove('active'));
-    renderDiscFilters(); renderDiscussions();
-  }
-  else if (kind === 'help') openHelp();
-}
+/* ---------- Навигация и поддержка ---------- */
+function quickLink(kind) { if (kind === 'help') openHelp(); }
 function sbKey(e, kind) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); quickLink(kind); } }
-
-/* Расписание и зачёты */
-function getSchedule() { return lsGet('studhub_schedule', []); }
-function openSchedule() {
-  const d = document.getElementById('schDate'); if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
-  renderSchedule(); openModal('scheduleModal');
-}
-function renderSchedule() {
-  const box = document.getElementById('schList'); if (!box) return;
-  const today = new Date().toISOString().slice(0, 10);
-  const items = getSchedule().sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
-  if (!items.length) { box.innerHTML = '<div class="sb-empty">Пока пусто. Добавьте пару, зачёт или дедлайн — они появятся здесь.</div>'; return; }
-  box.innerHTML = items.map(it => {
-    const dt = new Date(it.date + 'T00:00:00');
-    const past = it.date < today;
-    return `<div class="sb-sch-item${past ? ' past' : ''}"><div class="event-date"><div class="day">${String(dt.getDate()).padStart(2, '0')}</div><div class="month">${dt.toLocaleDateString('ru-RU', { month: 'short' }).replace('.', '')}</div></div><div class="event-info" style="flex:1;min-width:0"><div class="event-title">${SB_ESC(it.title)}</div><div class="event-meta">${it.type === 'exam' ? 'Зачёт / экзамен' : 'Пара'}${it.time ? ' · ' + SB_ESC(it.time) : ''}${past ? ' · прошло' : ''}</div></div><button class="sb-x" title="Удалить" onclick="removeScheduleItem('${it.id}')">✕</button></div>`;
-  }).join('');
-}
-function addScheduleItem() {
-  const title = document.getElementById('schTitle').value.trim();
-  const date = document.getElementById('schDate').value;
-  if (!title) { showToast('Введите название', 'error'); return; }
-  if (!date) { showToast('Выберите дату', 'error'); return; }
-  const list = getSchedule();
-  list.push({ id: 's' + Date.now().toString(36), title: title.slice(0, 80), date, time: document.getElementById('schTime').value, type: document.getElementById('schType').value });
-  lsSet('studhub_schedule', list);
-  document.getElementById('schTitle').value = '';
-  renderSchedule(); showToast('Добавлено в расписание');
-}
-function removeScheduleItem(id) { lsSet('studhub_schedule', getSchedule().filter(x => x.id !== id)); renderSchedule(); }
 
 /* Помощь */
 function openHelp() {
@@ -68,7 +27,7 @@ function openHelp() {
 // Локальный режим: собеседники из списка SB_MEMBERS, переписка хранится в браузере.
 // Режим Supabase (BACKEND): настоящие личные сообщения между аккаунтами (таблица messages, см. supabase/chat.sql).
 const SB_MEMBERS = [];
-const SB_COLORS = [['#f0e8f8', '#8b6ab5'], ['#e8f0f8', '#4a8ab5'], ['#f5f0e8', '#b59a4a'], ['var(--accent-soft)', 'var(--accent)']];
+const SB_COLORS = [['var(--sh-avatar-bg-1)', 'var(--sh-avatar-fg-1)'], ['var(--sh-avatar-bg-2)', 'var(--sh-avatar-fg-2)'], ['var(--sh-avatar-bg-3)', 'var(--sh-avatar-fg-3)'], ['var(--accent-soft)', 'var(--accent)']];
 let sbPeers = [], sbThreads = {}, sbChatWith = null, sbPoll = null, sbSearchT = null, sbSetupHint = false;
 function sbOnlineMode() { return typeof BACKEND !== 'undefined' && BACKEND && typeof sb !== 'undefined' && sb; }
 const sbIni = n => (String(n || '?').trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2)) || '?';

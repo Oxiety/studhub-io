@@ -9,14 +9,14 @@ let searchHits = [];
 // Перейти к посту на главной и подсветить его
 function goToPost(id) {
   switchView('home');
-  setTimeout(() => {
-    const el = document.querySelector('.post-card[data-id="' + id + '"]');
+  const ready = typeof loadHomePosts === 'function' ? loadHomePosts() : Promise.resolve();
+  Promise.resolve(ready).then(() => {
+    const el = document.querySelector('.post-card[data-id="' + CSS.escape(String(id)) + '"]');
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    el.style.transition = 'box-shadow .3s';
-    el.style.boxShadow = '0 0 0 3px var(--accent)';
-    setTimeout(() => { el.style.boxShadow = ''; }, 2200);
-  }, 50);
+    el.classList.add('post-highlight');
+    setTimeout(() => el.classList.remove('post-highlight'), 2200);
+  });
 }
 // Перейти к обсуждению: открываем раздел и фильтруем список по его названию
 function goToDiscussion(title) {

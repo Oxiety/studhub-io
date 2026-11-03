@@ -1,0 +1,174 @@
+/* StudHub refinement — stronger visual hierarchy, saved-post actions and adaptive feed. */
+:root {
+  --sh-avatar-bg-1: #f1eafa;
+  --sh-avatar-fg-1: #7754a8;
+  --sh-avatar-bg-2: #e8f1fb;
+  --sh-avatar-fg-2: #3f76a9;
+  --sh-avatar-bg-3: #fbf1df;
+  --sh-avatar-fg-3: #9b7629;
+  --sh-feed-tint: color-mix(in srgb, var(--accent) 5%, var(--surface));
+}
+:root[data-theme="dark"] {
+  --sh-avatar-bg-1: #30263d;
+  --sh-avatar-fg-1: #d0b5f3;
+  --sh-avatar-bg-2: #223247;
+  --sh-avatar-fg-2: #a9d0f5;
+  --sh-avatar-bg-3: #3a3020;
+  --sh-avatar-fg-3: #f0d18a;
+  --sh-feed-tint: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+
+/* Wallet sits next to the brand, before the perfectly centered search field. */
+.header-left { gap: 12px; }
+#walletChip {
+  display: inline-flex !important;
+  flex: 0 0 auto;
+  min-height: 40px;
+  margin-left: 4px;
+  border-radius: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+#walletChip:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (min-width: 901px) and (max-width: 1360px) {
+  #walletChip { display: inline-flex !important; }
+}
+@media (min-width: 901px) and (max-width: 1180px) {
+  .header-center { width: min(330px, calc(100vw - 700px)); }
+  #btnCreateProject span { display: none; }
+  #btnCreateProject { width: 42px; padding: 0; justify-content: center; }
+}
+@media (min-width: 1181px) and (max-width: 1360px) {
+  .header-center { width: 360px; }
+}
+
+/* User posts are a first-class part of the home page, not an empty placeholder. */
+.home-community-feed {
+  margin: 42px 0 34px;
+  padding: 24px;
+  border: 1px solid color-mix(in srgb, var(--border) 78%, var(--accent) 10%);
+  border-radius: 24px;
+  background: linear-gradient(155deg, var(--sh-feed-tint), color-mix(in srgb, var(--surface) 96%, var(--accent) 4%) 50%, var(--surface));
+  box-shadow: 0 12px 34px rgba(18, 35, 48, .055), inset 0 1px 0 rgba(255,255,255,.28);
+}
+.home-feed-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.home-feed-heading > div:first-child { min-width: 0; }
+.home-feed-eyebrow {
+  margin-bottom: 5px;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.home-feed-heading .section-title { margin-bottom: 3px; font-size: 23px; }
+.home-feed-heading p { color: var(--muted); font-size: 13px; line-height: 1.55; }
+.home-feed-sort { flex: 0 0 auto; margin: 0; padding: 4px; border: 1px solid var(--sh-line); border-radius: 14px; background: color-mix(in srgb, var(--surface) 82%, transparent); }
+.home-feed-sort .tab-btn { min-height: 34px; padding: 7px 12px; font-size: 12px; }
+.home-post-composer {
+  min-height: 66px;
+  margin-bottom: 16px !important;
+  padding: 13px 15px !important;
+  border-color: color-mix(in srgb, var(--accent) 17%, var(--border)) !important;
+  background: color-mix(in srgb, var(--surface) 94%, var(--accent) 6%) !important;
+  box-shadow: 0 5px 16px color-mix(in srgb, var(--accent) 7%, transparent) !important;
+}
+.home-post-composer-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 2px; text-align: left; }
+.home-post-composer-copy strong { color: var(--text); font-size: 13px; font-weight: 700; }
+.home-post-composer-copy span { color: var(--muted); font-size: 12px; }
+.home-post-composer > .btn-submit { flex: 0 0 auto !important; min-height: 39px; padding-inline: 14px; white-space: nowrap; }
+.home-posts-list { display: grid; gap: 13px; }
+.home-post-card { margin-bottom: 0 !important; padding: 20px 22px !important; background: color-mix(in srgb, var(--surface) 96%, var(--accent) 4%) !important; }
+.home-post-card .post-header-actions, .post-header-actions { display: flex; align-items: center; justify-content: flex-end; gap: 7px; flex: 0 0 auto; }
+.home-post-card .post-tag { margin-top: 14px; }
+.home-post-card .post-title { margin-top: 8px; margin-bottom: 7px; font-size: 18px; line-height: 1.38; letter-spacing: -.025em; }
+.home-post-card .post-text { margin-top: 7px; font-size: 14px; line-height: 1.72; color: var(--text-2); overflow-wrap: anywhere; }
+.home-post-card .post-footer { margin-top: 16px; padding-top: 13px; border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent); }
+.post-avatar.has-image { overflow: hidden; padding: 0; }
+.post-avatar.has-image img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.post-share-label { cursor: default !important; }
+.home-posts-empty { margin: 0; padding: 28px 20px !important; border-style: dashed !important; background: color-mix(in srgb, var(--surface) 82%, transparent) !important; }
+.home-posts-empty .empty-state-icon { color: var(--accent); font-size: 31px; line-height: 1; margin-bottom: 12px; }
+
+/* Bookmark button is deliberately quiet until selected. */
+.post-save-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 650;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .18s ease, background .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.post-save-btn svg { width: 15px; height: 15px; flex: 0 0 15px; fill: currentColor; }
+.post-save-btn:hover { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 18%, var(--border)); transform: translateY(-1px); }
+.post-save-btn:active { transform: scale(.96); }
+.post-save-btn.is-saved { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 25%, var(--border)); box-shadow: inset 0 1px 0 rgba(255,255,255,.18); }
+.post-save-btn.is-saved svg path { fill: currentColor; }
+.saved-posts-list { display: grid; gap: 13px; }
+.saved-posts-list .post-card { margin-bottom: 0; }
+.post-highlight { border-color: var(--accent) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 24%, transparent), var(--sh-shadow-card) !important; }
+
+/* Support card stays visually balanced after removing the three shortcuts. */
+.sidebar-right .sidebar-card:has(.quick-link:only-child) { padding-bottom: 16px; }
+.sidebar-right .sidebar-card:has(.quick-link:only-child) .quick-link { margin-top: 5px; }
+
+@media (max-width: 900px) {
+  #walletChip {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+    padding: 0 !important;
+    margin: 0 0 0 1px;
+    border-radius: 50%;
+    justify-content: center;
+    box-shadow: 0 2px 9px color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+  #walletChip svg { width: 17px !important; height: 17px !important; }
+  #walletChip span { display: none; }
+  .home-community-feed { margin: 30px 0 24px; padding: 19px; border-radius: 21px; }
+  .home-post-card { padding: 17px !important; }
+}
+@media (max-width: 600px) {
+  .home-feed-heading { align-items: flex-start; flex-direction: column; gap: 12px; margin-bottom: 14px; }
+  .home-feed-heading .section-title { font-size: 21px; }
+  .home-feed-sort { width: 100%; }
+  .home-feed-sort .tab-btn { flex: 1; justify-content: center; }
+  .home-post-composer { gap: 10px; padding: 12px !important; }
+  .home-post-composer-copy strong { font-size: 12px; }
+  .home-post-composer-copy span { font-size: 11px; }
+  .home-post-composer > .btn-submit { min-height: 36px; padding-inline: 10px; font-size: 11px; }
+  .home-post-card .post-title { font-size: 16px; }
+  .home-post-card .post-text { font-size: 13px; }
+  .post-save-btn { width: 34px; min-width: 34px; padding: 0; gap: 0; }
+  .post-save-btn span { display: none; }
+  .post-header-actions .btn-more { min-width: 32px; }
+}
+@media (max-width: 380px) {
+  #walletChip { width: 33px; height: 33px; min-width: 33px; min-height: 33px; }
+  .home-community-feed { padding: 14px; margin-inline: -2px; }
+  .home-post-composer { flex-wrap: wrap; }
+  .home-post-composer-copy { min-width: calc(100% - 60px); }
+  .home-post-composer > .btn-submit { flex: 1 1 100% !important; }
+  .home-post-card { padding: 14px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-post-card, .post-save-btn, #walletChip { transition: none !important; }
+}

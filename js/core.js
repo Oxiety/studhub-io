@@ -38,7 +38,7 @@ window.scrollTo(0, 0);
 const mainScroller = document.querySelector('.main-content'); if (mainScroller) mainScroller.scrollTop = 0;
 const leftScroller = document.querySelector('.sidebar-left'); if (leftScroller) leftScroller.scrollTop = 0;
 if (viewName === 'myprojects') renderMyProjects();
-if (viewName === 'home') renderFundraisingProjects();
+if (viewName === 'home') { renderFundraisingProjects(); if (typeof loadHomePosts === 'function') loadHomePosts(); }
 if (viewName === 'profile') { updateProfile(); renderProfileTab(); }
 if (viewName === 'discussions') renderDiscussions();
 if (viewName === 'communitylist' || viewName === 'allcommunities') renderAllCommunities();

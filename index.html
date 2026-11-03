@@ -28,6 +28,8 @@
 <link rel="stylesheet" href="css/mobile.css">
 <link rel="stylesheet" href="css/polish.css">
 <link rel="stylesheet" href="css/edit-profile.css">
+<link rel="stylesheet" href="css/redesign.css">
+<link rel="stylesheet" href="css/refinement.css">
 <script src="js/theme-init.js"></script>
 </head>
 <body>
@@ -39,7 +41,9 @@
 <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg></div>
 <div class="logo-text">Stud<span>Hub</span></div>
 </a>
+<div class="wallet-chip" id="walletChip" role="button" tabindex="0" aria-label="Кошелёк" onclick="switchView('wallet')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();switchView('wallet')}" title="Кошелёк"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8z"/></svg><span id="walletChipAmount">0 ₽</span></div>
 </div>
+
 <div class="header-center">
 <div class="search-bar">
 <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
@@ -50,12 +54,12 @@
 </div>
 <div class="header-right">
 <button type="button" class="header-icon search-toggle" id="searchToggle" onclick="openMobileSearch()" aria-label="Поиск"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></button>
-<div class="wallet-chip" id="walletChip" onclick="switchView('wallet')" title="Кошелёк"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8z"/></svg><span id="walletChipAmount">0 ₽</span></div>
+
 <button class="btn-create" id="btnCreateProject">
 <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
 <span data-i18n="hdr.create">Создать проект</span>
 </button>
-<div class="header-icon sb-mobile-only" id="chatIcon" role="button" tabindex="0" aria-label="Чат" onclick="openChat()" onkeydown="if(event.key==='Enter')openChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
+<div class="header-icon header-chat" id="chatIcon" role="button" tabindex="0" aria-label="Чат" onclick="openChat()" onkeydown="if(event.key==='Enter')openChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
 <div class="header-icon" id="notifIcon" style="position:relative;">
 <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
 <span class="badge" id="notifBadge" style="display:none">0</span>
@@ -93,10 +97,10 @@
 <a class="nav-item" id="nav-wallet" onclick="switchView('wallet')"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg><span data-i18n="nav.wallet">Кошелёк</span><span class="count" id="navWalletBalance">0 ₽</span></a>
 <a class="nav-item" id="nav-settings" onclick="switchView('settings')"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg><span data-i18n="nav.settings">Настройки</span></a>
 <a class="nav-item" id="installBtn" style="display:none" onclick="installApp()"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg><span>Установить приложение</span></a>
-<div class="section-label sb-mobile-only">Под рукой</div>
+<div class="section-label sb-mobile-only">Связь и поддержка</div>
 <a class="nav-item sb-mobile-only" onclick="closeMobileMenu();openChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg><span>Чат</span></a>
-<a class="nav-item sb-mobile-only" onclick="closeMobileMenu();quickLink('schedule')"><svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg><span>Расписание и зачёты</span></a>
-<a class="nav-item sb-mobile-only" onclick="quickLink('career')"><svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span>Карьера и стажировки</span></a>
+
+
 <a class="nav-item sb-mobile-only" onclick="closeMobileMenu();quickLink('help')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 10.9 13 11.5 13 13h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg><span>Помощь и поддержка</span></a>
 <div class="section-label" data-i18n="nav.mycomm">Мои сообщества</div>
 <div id="sbCommunities"></div>
@@ -125,10 +129,24 @@
 </div>
 <div class="composer is-link" style="margin-bottom:22px;" role="button" tabindex="0" onclick="openCreateModal()" onkeydown="if(event.key==='Enter')openCreateModal()"><div class="composer-avatar" id="composerAvatar">С</div><div style="flex:1;font-size:14px;color:var(--muted);" data-i18n="home.idea">Есть идея, которой нужно финансирование?</div><button class="btn-submit" type="button" data-i18n="home.place">Разместить проект</button></div>
 <div class="section-block"><div class="section-header"><h2 class="section-title" data-i18n="home.seeking">Ищут финансирование</h2><span style="font-size:12px;color:var(--muted);">Проекты студентов</span></div><div class="projects-grid" id="fundraisingProjectsGrid"></div></div>
+<section class="home-community-feed" aria-labelledby="homePostsTitle">
+  <div class="home-feed-heading">
+    <div><div class="home-feed-eyebrow">Сообщество StudHub</div><h2 class="section-title" id="homePostsTitle">Посты студентов</h2><p>Новости, идеи и заметки от участников платформы</p></div>
+    <div class="tabs-row home-feed-sort" aria-label="Сортировка публикаций">
+      <button class="tab-btn active" type="button" onclick="sortPosts('new',this)">Новые</button>
+      <button class="tab-btn" type="button" onclick="sortPosts('top',this)">Популярные</button>
+    </div>
+  </div>
+  <div class="composer is-link home-post-composer" role="button" tabindex="0" onclick="openPostModal()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openPostModal()}">
+    <div class="composer-avatar" id="homePostComposerAvatar">С</div>
+    <div class="home-post-composer-copy"><strong>Есть чем поделиться?</strong><span>Расскажите сообществу, что у вас нового</span></div>
+    <button class="btn-submit" type="button" onclick="event.stopPropagation();openPostModal()">Написать пост</button>
+  </div>
+  <div class="home-posts-list" id="postsContainer" aria-live="polite"></div>
+</section>
 </div>
 
 <div class="view" id="view-discussions">
-<div class="breadcrumb">Обсуждения</div>
 <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;"><h1 class="page-title" style="margin-bottom:0;">Обсуждения</h1><button class="btn-create" onclick="openDiscModal()">＋ Новое обсуждение</button></div>
 <div class="composer"><input class="composer-input" id="discSearch" placeholder="Поиск по обсуждениям..." oninput="discQ=this.value.trim().toLowerCase();renderDiscussions()" maxlength="100"></div>
 <div class="tabs-row" id="discCats"></div>
@@ -150,7 +168,6 @@
 </div>
 
 <div class="view" id="view-communitylist">
-<div class="breadcrumb">Сообщества</div>
 <h1 class="page-title">Сообщества</h1>
 <div class="composer"><div class="composer-avatar">С</div><input class="composer-input" id="communitySearch" placeholder="Найти сообщество..." oninput="renderAllCommunities()" maxlength="100"><div class="composer-actions"><button class="composer-btn add"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button></div></div>
 <div class="tabs-row" id="communityFilters"><button class="tab-btn active" onclick="setCommunityFilter('all',this)">Все</button><button class="tab-btn" onclick="setCommunityFilter('mine',this)">Мои</button><button class="tab-btn" onclick="setCommunityFilter('popular',this)">Популярные</button><button class="tab-btn" onclick="setCommunityFilter('new',this)">Новые</button></div>
@@ -158,7 +175,6 @@
 </div>
 
 <div class="view" id="view-myprojects">
-<div class="breadcrumb">Мои проекты</div>
 <div class="my-projects-header"><h1 class="page-title" style="margin-bottom:0;">Мои проекты</h1></div>
 <div class="stats-row"><div class="stat-box"><div class="stat-box-num" id="statTotal">0</div><div class="stat-box-label">Всего проектов</div></div><div class="stat-box"><div class="stat-box-num" id="statActive">0</div><div class="stat-box-label">Активных</div></div><div class="stat-box"><div class="stat-box-num" id="statViews">0</div><div class="stat-box-label">Всего просмотров</div></div><div class="stat-box"><div class="stat-box-num" id="statLikes">0</div><div class="stat-box-label">Всего лайков</div></div></div>
 <div id="myProjectsContainer"></div>
@@ -270,7 +286,7 @@
 <div class="stat-reviews"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span id="statReviews">0</span> отзыва</div>
 </div>
 </div>
-<div class="profile-tabs"><button class="profile-tab active" onclick="switchProfileTab(this,'posts')">Публикации <span class="tab-count" id="profileTabPostsCount">0</span></button><button class="profile-tab" onclick="switchProfileTab(this,'projects')">Проекты <span class="tab-count" id="profileTabProjectsCount">0</span></button><button class="profile-tab" onclick="switchProfileTab(this,'saved')">Сохранённое</button></div>
+<div class="profile-tabs"><button class="profile-tab active" onclick="switchProfileTab(this,'posts')">Публикации <span class="tab-count" id="profileTabPostsCount">0</span></button><button class="profile-tab" onclick="switchProfileTab(this,'projects')">Проекты <span class="tab-count" id="profileTabProjectsCount">0</span></button><button class="profile-tab" onclick="switchProfileTab(this,'saved')">Сохранённое <span class="tab-count" id="profileTabSavedCount">0</span></button></div>
 <div id="profileTabContent"></div>
 <div class="profile-grid">
 <div>
@@ -286,27 +302,12 @@
 </main>
 
 <aside class="sidebar-right">
-<div class="sidebar-card"><div class="card-header"><div class="card-title">Под рукой</div></div><div class="quick-link" role="button" tabindex="0" onclick="quickLink('schedule')" onkeydown="sbKey(event,'schedule')"><div class="quick-link-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg></div><div class="quick-link-text">Расписание и зачёты</div><div class="quick-link-arrow">›</div></div><div class="quick-link" role="button" tabindex="0" onclick="quickLink('library')" onkeydown="sbKey(event,'library')"><div class="quick-link-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div><div class="quick-link-text">Библиотека и материалы</div><div class="quick-link-arrow">›</div></div><div class="quick-link" role="button" tabindex="0" onclick="quickLink('career')" onkeydown="sbKey(event,'career')"><div class="quick-link-icon"><svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-5 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4 8h-8v-1c0-1.33 2.67-2 4-2s4 .67 4 2v1z"/></svg></div><div class="quick-link-text">Карьера и стажировки</div><div class="quick-link-arrow">›</div></div><div class="quick-link" role="button" tabindex="0" onclick="quickLink('help')" onkeydown="sbKey(event,'help')"><div class="quick-link-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div><div class="quick-link-text">Помощь и поддержка</div><div class="quick-link-arrow">›</div></div></div>
+<div class="sidebar-card"><div class="card-header"><div class="card-title">Центр поддержки</div></div><div class="quick-link" role="button" tabindex="0" onclick="quickLink('help')" onkeydown="sbKey(event,'help')"><div class="quick-link-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div><div class="quick-link-text">Помощь и поддержка</div><div class="quick-link-arrow">›</div></div></div>
 <div class="sidebar-card"><div class="card-header"><div class="card-title">Свои на связи</div><button class="card-link" onclick="openChat()">Открыть чат</button></div><div id="sbOnline"></div></div>
 <div class="rules-card" role="button" tabindex="0" onclick="openRules(event)" onkeydown="if(event.key==='Enter')openRules(event)"><div class="rules-title">Где уважуха — там и движуха</div><div class="rules-text">Уважай собеседников, проверяй источники и не бойся задавать вопросы. Правила StudHub помогают всем чувствовать себя комфортно.</div><div class="rules-link">Правила платформы ↗</div></div>
 </aside>
 </div>
 
-
-<!-- РАСПИСАНИЕ И ЗАЧЁТЫ -->
-<div class="modal-overlay" id="scheduleModal" onclick="if(event.target===this)closeModal('scheduleModal')"><div class="modal">
-<div class="modal-header"><div class="modal-title">Расписание и зачёты</div><button class="modal-close" onclick="closeModal('scheduleModal')">✕</button></div>
-<div class="modal-body">
-<div class="sb-sch-form">
-<input class="form-input full" id="schTitle" maxlength="80" placeholder="Например: Алгоритмизация, зачёт" onkeydown="if(event.key==='Enter')addScheduleItem()">
-<input class="form-input" id="schDate" type="date">
-<input class="form-input" id="schTime" type="time">
-<select class="form-select" id="schType"><option value="class">Пара</option><option value="exam">Зачёт / экзамен</option></select>
-<button class="btn-submit" onclick="addScheduleItem()">Добавить</button>
-</div>
-<div id="schList"></div>
-</div>
-</div></div>
 
 <!-- ПОМОЩЬ -->
 <div class="modal-overlay" id="helpModal" onclick="if(event.target===this)closeModal('helpModal')"><div class="modal">
@@ -453,7 +454,6 @@
 <div class="ep-foot">
 <button class="btn-cancel" type="button" onclick="closeEditProfileModal()">Отмена</button>
 <button class="btn-submit" type="button" id="epSave" onclick="saveProfile()">Сохранить</button>
-</div>
 </div>
 </div>
 </div>
