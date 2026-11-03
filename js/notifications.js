@@ -4,13 +4,20 @@ function getNotifs() {
   let list = lsGet('studhub_notifs', null);
   if (!list) { list = NOTIF_SEED; lsSet('studhub_notifs', list); }
   const clean = list.filter(n => !['n1', 'n2', 'n3'].includes(n.id)); // убираем старые демо-уведомления
-  if (clean.length !== list.length) { list = clean; lsSet('studhub_notifs', list); }
-  return list;
+  let changed = clean.length !== list.length;
+  const migrated = clean.map(n => {
+    const color = n.color === '#e8f5f2' ? '#eef2e4' : n.color;
+    const fg = n.fg === '#2d8a7a' ? '#667c40' : n.fg;
+    if (color !== n.color || fg !== n.fg) changed = true;
+    return color === n.color && fg === n.fg ? n : { ...n, color, fg };
+  });
+  if (changed) lsSet('studhub_notifs', migrated);
+  return migrated;
 }
 function pushNotif(type, html, letter) {
   if (getSettings().notif[type] === false) return;
   const list = getNotifs();
-  list.unshift({ id: 'n' + Date.now(), type, color: '#e8f5f2', fg: '#2d8a7a', letter: letter || '₽', text: html, ts: Date.now(), read: false });
+  list.unshift({ id: 'n' + Date.now(), type, color: '#eef2e4', fg: '#667c40', letter: letter || '₽', text: html, ts: Date.now(), read: false });
   lsSet('studhub_notifs', list.slice(0, 30));
   renderNotifs();
 }

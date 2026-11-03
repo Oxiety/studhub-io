@@ -59,7 +59,7 @@ body { font-feature-settings: "cv11", "ss01"; -webkit-font-smoothing: antialiase
 .funding-project-card .funding-title { font-size: 17px; letter-spacing: -.01em; }
 .funding-project-card .funding-desc { color: var(--text-2); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex: 1 1 auto; }
 .funding-project-card .funding-progress { height: 10px; background: var(--surface-3); margin: 8px 0 10px; }
-.funding-project-card .funding-progress span { background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #7be0c8)); min-width: 4px; transition: width .5s ease; }
+.funding-project-card .funding-progress span { background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #d0dfa8)); min-width: 4px; transition: width .5s ease; }
 .funding-project-card strong { font-size: 16px; font-weight: 750; }
 .funding-project-card .funding-footer { padding-top: 10px; border-top: 1px dashed var(--line); }
 .funding-project-card .funding-actions { margin-top: auto; }

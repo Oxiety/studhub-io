@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#2d8a7a">
+<meta name="theme-color" content="#667c40">
 <meta name="description" content="StudHub — краудфандинг студенческих проектов">
 <meta property="og:title" content="StudHub">
 <meta property="og:description" content="Краудфандинг студенческих проектов">
@@ -322,7 +322,7 @@
 <div class="sb-chat">
 <div class="sb-chat-side"><div id="chatSearchWrap" style="display:none;padding:2px 2px 8px"><input class="form-input" id="chatSearch" placeholder="Найти студента…" oninput="sbSearchPeople(this.value)" autocomplete="off" style="padding:9px 12px" maxlength="60"><div id="chatFound"></div></div><div id="chatPeople"></div></div>
 <div class="sb-chat-main">
-<div class="sb-chat-head"><b id="chatTitle" onclick="openChatProfile()" title="Открыть профиль"></b><span id="chatSub"></span></div>
+<div class="sb-chat-head"><button class="sb-chat-back" type="button" onclick="sbMobileBack()" aria-label="Назад к чатам">‹</button><b id="chatTitle" onclick="openChatProfile()" title="Открыть профиль"></b><span id="chatSub"></span></div>
 <div class="sb-msgs" id="chatMsgs"></div>
 <div class="sb-note" id="chatNote"></div>
 <div class="sb-chat-input"><input class="form-input" id="chatInput" maxlength="1000" placeholder="Напишите сообщение..." autocomplete="off"><button class="btn-submit" id="chatSend" onclick="sendChatMsg()">Отправить</button></div>

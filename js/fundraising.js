@@ -155,7 +155,7 @@ function notifyUser(userId,type,html){
  if(getSettings().notif[type]===false)return;
  const k='u_'+userId+'_studhub_notifs';let l=[];
  try{l=JSON.parse(localStorage.getItem(k))||[]}catch(e){}
- l.unshift({id:'n'+Date.now(),type,color:'#e8f5f2',fg:'#2d8a7a',letter:'₽',text:html,ts:Date.now(),read:false});
+ l.unshift({id:'n'+Date.now(),type,color:'#eef2e4',fg:'#667c40',letter:'₽',text:html,ts:Date.now(),read:false});
  localStorage.setItem(k,JSON.stringify(l.slice(0,30)));
 }
 let supporting=false;

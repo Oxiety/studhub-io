@@ -74,7 +74,7 @@ async function pullNotifs() {
   const list = getNotifs(), have = new Set(list.map(n => n.id));
   rows.reverse().forEach(r => {
     if (have.has('db' + r.id)) return;
-    list.unshift({ id: 'db' + r.id, type: r.type, color: '#e8f5f2', fg: '#2d8a7a', letter: '₽', text: escapeHtml(r.text), ts: Date.parse(r.created_at), read: false });
+    list.unshift({ id: 'db' + r.id, type: r.type, color: '#eef2e4', fg: '#667c40', letter: '₽', text: escapeHtml(r.text), ts: Date.parse(r.created_at), read: false });
   });
   lsSet('studhub_notifs', list.slice(0, 30));
   renderNotifs();

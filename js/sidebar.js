@@ -127,6 +127,8 @@ function openMember(name) {
 }
 async function openChat(id) {
   if (id) sbChatWith = id;
+  const chatModal = document.getElementById('chatModal');
+  chatModal.classList.toggle('mobile-chat-open', !!id);
   openModal('chatModal');
   document.getElementById('chatSearchWrap').style.display = sbOnlineMode() ? '' : 'none';
   await sbLoad();
@@ -136,7 +138,8 @@ async function openChat(id) {
   if (sbOnlineMode()) sbPoll = setInterval(async () => { if (!document.getElementById('chatModal').classList.contains('show')) { clearInterval(sbPoll); return; } const before = JSON.stringify(sbThreads); if (await sbLoad() && JSON.stringify(sbThreads) !== before) renderChat(true); }, 4000);
   setTimeout(() => { const i = document.getElementById('chatInput'); if (i && sbChatWith) i.focus(); }, 50);
 }
-function sbPick(i) { sbChatWith = sbPeers[i].id; renderChat(); }
+function sbPick(i) { sbChatWith = sbPeers[i].id; document.getElementById('chatModal').classList.add('mobile-chat-open'); renderChat(); }
+function sbMobileBack() { document.getElementById('chatModal').classList.remove('mobile-chat-open'); }
 function renderChat(keepInput) {
   const side = document.getElementById('chatPeople'), box = document.getElementById('chatMsgs');
   const input = document.getElementById('chatInput'), send = document.getElementById('chatSend');
@@ -193,6 +196,7 @@ function sbSearchPeople(q) {
 }
 function sbStartWith(id) {
   sbChatWith = id;
+  document.getElementById('chatModal').classList.add('mobile-chat-open');
   document.getElementById('chatSearch').value = ''; document.getElementById('chatFound').innerHTML = '';
   renderChat(); document.getElementById('chatInput').focus();
 }

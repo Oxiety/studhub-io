@@ -11,13 +11,15 @@
   --text-2: #555555;
   --muted: #888888;
   --muted-2: #aaaaaa;
-  --accent: #2d8a7a;
-  --accent-hover: color-mix(in srgb, var(--accent) 85%, #000);
+  --accent: #91b86b;
+  --accent-hover: #789e54;
   --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--surface));
   --accent-soft-2: color-mix(in srgb, var(--accent) 24%, var(--surface));
   color-scheme: light;
 }
 :root[data-theme="dark"] {
+  --accent: #a7ca83;
+  --accent-hover: #8fb76a;
   --bg: #0f1318;
   --surface: #1a1f26;
   --surface-2: #151a20;
