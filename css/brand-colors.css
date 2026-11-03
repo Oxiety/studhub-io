@@ -1,15 +1,14 @@
-/* StudHub brand palette: vivid mint/menthol, consistent initials across the entire UI. */
+/* Theme-aware accent palette. The selected accent drives every initial avatar and soft icon surface. */
 :root {
   --accent: #00E3A0;
-  --accent-hover: #00BF84;
-  --accent-contrast: #053A2B;
+  --accent-hover: color-mix(in srgb, var(--accent) 86%, #13251f);
+  --accent-contrast: #10332a;
   --accent-soft: color-mix(in srgb, var(--accent) 13%, var(--surface));
-  --accent-soft-2: color-mix(in srgb, var(--accent) 25%, var(--surface));
-  --sh-mint-bright: #00E3A0;
-  --sh-avatar-bg: #E2FFF3;
-  --sh-avatar-fg: #007A55;
-  --sh-avatar-ring: rgba(0, 191, 132, .14);
-  /* Legacy color slots intentionally collapse to the same theme color. */
+  --accent-soft-2: color-mix(in srgb, var(--accent) 24%, var(--surface));
+  --sh-mint-bright: var(--accent);
+  --sh-avatar-bg: color-mix(in srgb, var(--accent) 13%, #ffffff);
+  --sh-avatar-fg: color-mix(in srgb, var(--accent) 78%, #17232b);
+  --sh-avatar-ring: color-mix(in srgb, var(--accent) 17%, transparent);
   --sh-avatar-bg-1: var(--sh-avatar-bg);
   --sh-avatar-bg-2: var(--sh-avatar-bg);
   --sh-avatar-bg-3: var(--sh-avatar-bg);
@@ -25,15 +24,13 @@
 }
 
 :root[data-theme="dark"] {
-  --accent: #40F5B4;
-  --accent-hover: #1ADDA0;
-  --accent-contrast: #063729;
+  --accent-hover: color-mix(in srgb, var(--accent) 82%, #071b15);
+  --accent-contrast: #10251f;
   --accent-soft: color-mix(in srgb, var(--accent) 17%, var(--surface));
-  --accent-soft-2: color-mix(in srgb, var(--accent) 30%, var(--surface));
-  --sh-mint-bright: #40F5B4;
-  --sh-avatar-bg: #123B2E;
-  --sh-avatar-fg: #68F8C2;
-  --sh-avatar-ring: rgba(64, 245, 180, .17);
+  --accent-soft-2: color-mix(in srgb, var(--accent) 29%, var(--surface));
+  --sh-avatar-bg: color-mix(in srgb, var(--accent) 23%, #20272b);
+  --sh-avatar-fg: color-mix(in srgb, var(--accent) 77%, #effaf6);
+  --sh-avatar-ring: color-mix(in srgb, var(--accent) 19%, transparent);
   --sh-avatar-bg-1: var(--sh-avatar-bg);
   --sh-avatar-bg-2: var(--sh-avatar-bg);
   --sh-avatar-bg-3: var(--sh-avatar-bg);
@@ -48,8 +45,7 @@
   --sh-icon-ink-3: var(--sh-avatar-fg);
 }
 
-/* All initials avatars share ONE hue family; only background brightness follows the theme.
-   background-color (not background shorthand) preserves users' uploaded avatar photos. */
+/* All initials avatars use the currently selected accent. Uploaded photos remain untouched. */
 .user-avatar,
 .ep-avatar-img,
 .composer-avatar,
@@ -65,11 +61,11 @@
 .disc-thread-composer-avatar {
   background-color: var(--sh-avatar-bg) !important;
   color: var(--sh-avatar-fg) !important;
-  border-color: color-mix(in srgb, var(--accent) 20%, var(--surface)) !important;
+  border-color: color-mix(in srgb, var(--accent) 24%, var(--surface)) !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 2px 8px var(--sh-avatar-ring) !important;
 }
 
-/* Remove legacy purple/blue/olive category variants from icon badges as well. */
+/* Icon chips and type variants follow the selected theme instead of keeping legacy colors. */
 .post-avatar.purple,
 .post-avatar.blue,
 .post-avatar.green,
@@ -94,14 +90,12 @@
 }
 
 .community-card-cover.c2 {
-  background: linear-gradient(135deg, var(--sh-avatar-bg), color-mix(in srgb, var(--accent) 16%, var(--surface))) !important;
+  background: linear-gradient(135deg, var(--sh-avatar-bg), color-mix(in srgb, var(--accent) 18%, var(--surface))) !important;
 }
 
-/* Keep bright mint readable on solid accent controls. */
 .btn-create,
 .btn-submit,
 .btn-edit-profile,
-.btn-join,
 .header-chat,
 .nav-item.active,
 .tab-btn.active,
@@ -123,15 +117,33 @@
 :root[data-theme="dark"] .disc-author-avatar,
 :root[data-theme="dark"] .disc-thread-reply-avatar,
 :root[data-theme="dark"] .disc-thread-composer-avatar {
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 3px 10px rgba(0,0,0,.20), 0 0 0 1px rgba(57,245,181,.04) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 3px 10px rgba(0,0,0,.20), 0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent) !important;
 }
 
-/* Dark lettering on neon-mint fills keeps primary actions crisp and readable. */
-.btn-create, .btn-submit, .btn-edit-profile,
+.btn-create,
+.btn-submit,
+.btn-edit-profile,
 .project-detail-actions .btn-action.primary,
-.tab-btn.active, .profile-tab.active,
-.bottom-nav a.bn-plus, .logo-icon { color: var(--accent-contrast) !important; }
+.tab-btn.active,
+.profile-tab.active,
+.bottom-nav a.bn-plus,
+.logo-icon { color: var(--accent-contrast) !important; }
 .logo-icon svg { fill: var(--accent-contrast) !important; }
-.btn-create svg, .btn-submit svg, .btn-edit-profile svg,
+.btn-create svg,
+.btn-submit svg,
+.btn-edit-profile svg,
 .project-detail-actions .btn-action.primary svg,
 .bottom-nav a.bn-plus svg { fill: currentColor !important; }
+
+/* Compact but clearly distinguishable theme selectors in settings. */
+.swatches { align-items: center; flex-wrap: wrap; gap: 11px; }
+.swatch {
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+.swatch:hover { transform: scale(1.08); }
+.swatch.active { box-shadow: 0 0 0 2px var(--text), 0 3px 9px color-mix(in srgb, var(--swatch-color) 24%, transparent); }
+.swatch:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }

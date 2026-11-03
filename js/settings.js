@@ -1,16 +1,17 @@
 // Настройки: тема, акцентный цвет, язык, уведомления, платежи, данные.
-const ACCENTS = ['#00E3A0', '#00C98B', '#16DDA6', '#28E6B0', '#58F0C2'];
+const ACCENTS = ['#00E3A0', '#4A7FD2', '#D7783D', '#8464CE', '#D35461'];
+const ACCENT_NAMES = { '#00E3A0': 'Мятный', '#4A7FD2': 'Синий', '#D7783D': 'Оранжевый', '#8464CE': 'Пурпурный', '#D35461': 'Красный' };
+const LEGACY_ACCENTS = { '#2D8A7A': '#00E3A0', '#3B82F6': '#4A7FD2', '#8B5CF6': '#8464CE', '#E8590C': '#D7783D', '#D6336C': '#D35461', '#00C98B': '#00E3A0', '#16DDA6': '#00E3A0', '#28E6B0': '#00E3A0', '#58F0C2': '#00E3A0' };
+function normalizeAccent(value) { const raw = String(value || '').toUpperCase(); return LEGACY_ACCENTS[raw] || (ACCENTS.includes(raw) ? raw : DEFAULT_SETTINGS.accent); }
 const DEFAULT_SETTINGS = {
   theme: 'light', accent: '#00E3A0', lang: 'ru', anonDefault: false, confirmPay: true,
   notif: { badge: true, toast: true, replies: true, donations: true, community: true, invites: true, digest: false },
 };
 function getSettings() {
   const s = lsGet('studhub_settings', {});
-  // Drop accents from older versions (pistachio/purple/blue/etc.); the product palette is mint-only.
-  if (!ACCENTS.includes(String(s.accent || '').toUpperCase())) {
-    s.accent = DEFAULT_SETTINGS.accent;
-    lsSet('studhub_settings', s);
-  }
+  // Keep every supported theme accent; migrate old saturated values to their softer equivalents.
+  const normalized = normalizeAccent(s.accent);
+  if (s.accent !== normalized) { s.accent = normalized; lsSet('studhub_settings', s); }
   return { ...DEFAULT_SETTINGS, ...s, notif: { ...DEFAULT_SETTINGS.notif, ...(s.notif || {}) } };
 }
 function saveSettings(s) { lsSet('studhub_settings', s); }
@@ -35,7 +36,7 @@ function toggleRow(label, desc, checked, handler) {
 function renderSettings() {
   const s = getSettings();
   document.querySelectorAll('#themeSeg button').forEach(b => b.classList.toggle('active', b.dataset.themeVal === s.theme));
-  document.getElementById('accentSwatches').innerHTML = ACCENTS.map(c => `<button class="swatch ${c === s.accent ? 'active' : ''}" style="background:${c}" onclick="setAccent('${c}')" aria-label="${c}"></button>`).join('');
+  document.getElementById('accentSwatches').innerHTML = ACCENTS.map(c => `<button type="button" class="swatch ${c === s.accent ? 'active' : ''}" style="--swatch-color:${c};background:${c}" onclick="setAccent('${c}')" aria-label="${ACCENT_NAMES[c]}" title="${ACCENT_NAMES[c]}" aria-pressed="${c === s.accent}"></button>`).join('');
   document.getElementById('langSelect').value = s.lang;
   document.querySelectorAll('.auth-lang select').forEach(el => el.value = s.lang);
   const n = s.notif;
