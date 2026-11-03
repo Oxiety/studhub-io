@@ -6,8 +6,8 @@ function getNotifs() {
   const clean = list.filter(n => !['n1', 'n2', 'n3'].includes(n.id)); // убираем старые демо-уведомления
   let changed = clean.length !== list.length;
   const migrated = clean.map(n => {
-    const color = n.color === '#e8f5f2' ? '#eef2e4' : n.color;
-    const fg = n.fg === '#2d8a7a' ? '#667c40' : n.fg;
+    const color = ['#e8f5f2', '#eef2e4', '#f0e8f8'].includes(n.color) ? 'var(--accent-soft)' : n.color;
+    const fg = ['#2d8a7a', '#667c40', '#8b6ab5'].includes(n.fg) ? 'var(--accent)' : n.fg;
     if (color !== n.color || fg !== n.fg) changed = true;
     return color === n.color && fg === n.fg ? n : { ...n, color, fg };
   });
@@ -17,7 +17,7 @@ function getNotifs() {
 function pushNotif(type, html, letter) {
   if (getSettings().notif[type] === false) return;
   const list = getNotifs();
-  list.unshift({ id: 'n' + Date.now(), type, color: '#eef2e4', fg: '#667c40', letter: letter || '₽', text: html, ts: Date.now(), read: false });
+  list.unshift({ id: 'n' + Date.now(), type, color: 'var(--accent-soft)', fg: 'var(--accent)', letter: letter || '₽', text: html, ts: Date.now(), read: false });
   lsSet('studhub_notifs', list.slice(0, 30));
   renderNotifs();
 }

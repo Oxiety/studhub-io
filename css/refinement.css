@@ -1,20 +1,32 @@
 /* StudHub refinement — stronger visual hierarchy, saved-post actions and adaptive feed. */
 :root {
-  --sh-avatar-bg-1: #f1eafa;
-  --sh-avatar-fg-1: #7754a8;
-  --sh-avatar-bg-2: #e8f1fb;
-  --sh-avatar-fg-2: #3f76a9;
-  --sh-avatar-bg-3: #fbf1df;
-  --sh-avatar-fg-3: #9b7629;
+  --sh-avatar-bg-1: #e5f4ee;
+  --sh-avatar-fg-1: #398b73;
+  --sh-avatar-bg-2: #e6f1ef;
+  --sh-avatar-fg-2: #438b83;
+  --sh-avatar-bg-3: #edf2e3;
+  --sh-avatar-fg-3: #71894d;
+  --sh-icon-soft-1: #e5f4ee;
+  --sh-icon-ink-1: #398b73;
+  --sh-icon-soft-2: #e6f1ef;
+  --sh-icon-ink-2: #438b83;
+  --sh-icon-soft-3: #edf2e3;
+  --sh-icon-ink-3: #71894d;
   --sh-feed-tint: color-mix(in srgb, var(--accent) 5%, var(--surface));
 }
 :root[data-theme="dark"] {
-  --sh-avatar-bg-1: #30263d;
-  --sh-avatar-fg-1: #d0b5f3;
-  --sh-avatar-bg-2: #223247;
-  --sh-avatar-fg-2: #a9d0f5;
-  --sh-avatar-bg-3: #3a3020;
-  --sh-avatar-fg-3: #f0d18a;
+  --sh-avatar-bg-1: #202d28;
+  --sh-avatar-fg-1: #8bcab5;
+  --sh-avatar-bg-2: #202e2e;
+  --sh-avatar-fg-2: #91c9bf;
+  --sh-avatar-bg-3: #292f25;
+  --sh-avatar-fg-3: #b0c98a;
+  --sh-icon-soft-1: #202d28;
+  --sh-icon-ink-1: #8bcab5;
+  --sh-icon-soft-2: #202e2e;
+  --sh-icon-ink-2: #91c9bf;
+  --sh-icon-soft-3: #292f25;
+  --sh-icon-ink-3: #b0c98a;
   --sh-feed-tint: color-mix(in srgb, var(--accent) 8%, var(--surface));
 }
 
@@ -171,4 +183,46 @@
 
 @media (prefers-reduced-motion: reduce) {
   .home-post-card, .post-save-btn, #walletChip { transition: none !important; }
+}
+
+
+/* Mint / menthol palette and theme-aware initials — no purple avatar variants. */
+.post-avatar.purple,
+.post-tag.purple,
+.project-card-icon.p2,
+.community-card-icon.i2,
+.achievement-icon.purple {
+  background: var(--sh-icon-soft-1) !important;
+  color: var(--sh-icon-ink-1) !important;
+}
+.post-avatar.blue,
+.post-tag.blue,
+.project-card-icon.p3,
+.community-card-icon.i3,
+.asset-icon.doc {
+  background: var(--sh-icon-soft-2) !important;
+  color: var(--sh-icon-ink-2) !important;
+}
+.project-card-icon.p4,
+.community-card-icon.i4,
+.achievement-icon.gold {
+  background: var(--sh-icon-soft-3) !important;
+  color: var(--sh-icon-ink-3) !important;
+}
+.community-card-cover.c2 {
+  background: linear-gradient(135deg, var(--sh-icon-soft-1), var(--sh-icon-soft-2)) !important;
+}
+.profile-cover {
+  background: linear-gradient(135deg, var(--sh-feed-tint), var(--surface-3) 54%, var(--sh-icon-soft-2)) !important;
+}
+:root[data-theme="dark"] .post-avatar,
+:root[data-theme="dark"] .online-member-avatar,
+:root[data-theme="dark"] .notif-avatar,
+:root[data-theme="dark"] .team-avatar,
+:root[data-theme="dark"] .sub-avatar {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 2px 7px rgba(0,0,0,.14);
+}
+:root[data-theme="light"] .post-avatar,
+:root:not([data-theme="dark"]) .post-avatar {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 2px 6px rgba(25,65,55,.06);
 }

@@ -29,9 +29,9 @@ function goToDiscussion(title) {
 function findSearchHits(query) {
   const has = (...parts) => parts.some(x => x && String(x).toLowerCase().includes(query));
   const hits = [];
-  getProjects().forEach(p => { if (has(p.name, p.desc)) hits.push({ type: t('search.project'), title: p.name, sub: p.desc ? p.desc.slice(0, 60) : 'Без описания', icon: '📦', color: '#eef2e4', action: () => { switchView('myprojects'); openProjectDetail(p.id); } }); });
-  allCampaigns().forEach(p => { if (has(p.name, p.desc, p.category)) hits.push({ type: t('search.fund'), title: p.name, sub: (p.desc || '').slice(0, 60), icon: p.icon, color: '#eef2e4', action: () => showFundingDetails(p.id) }); });
-  allCommunitiesData.forEach(c => { if (has(c.name, c.desc)) hits.push({ type: t('search.community'), title: c.name, sub: c.desc, icon: c.letter, color: '#f0e8f8', action: () => openCommunity(c.id) }); });
+  getProjects().forEach(p => { if (has(p.name, p.desc)) hits.push({ type: t('search.project'), title: p.name, sub: p.desc ? p.desc.slice(0, 60) : 'Без описания', icon: '📦', color: 'var(--accent-soft)', action: () => { switchView('myprojects'); openProjectDetail(p.id); } }); });
+  allCampaigns().forEach(p => { if (has(p.name, p.desc, p.category)) hits.push({ type: t('search.fund'), title: p.name, sub: (p.desc || '').slice(0, 60), icon: p.icon, color: 'var(--accent-soft)', action: () => showFundingDetails(p.id) }); });
+  allCommunitiesData.forEach(c => { if (has(c.name, c.desc)) hits.push({ type: t('search.community'), title: c.name, sub: c.desc, icon: c.letter, color: 'var(--accent-soft)', action: () => openCommunity(c.id) }); });
   homePostsData.forEach(p => { if (has(p.title, p.text)) hits.push({ type: t('search.post'), title: p.title, sub: p.community + ' · ' + p.author, icon: '📝', color: '#e8f0f8', action: () => goToPost(p.id) }); });
   getDiscs().forEach(d => { if (has(d.title, d.text)) hits.push({ type: t('search.disc'), title: d.title, sub: d.cat + ' · ' + d.author, icon: '💬', color: '#f5f0e8', action: () => goToDiscussion(d.title) }); });
   [...demoAssets, ...getUploadedAssets()].forEach(a => { if (has(a.name)) hits.push({ type: t('search.file'), title: a.name, sub: a.meta || '', icon: '📄', color: '#e8f0f8', action: () => switchView('assets') }); });
@@ -65,7 +65,7 @@ function renderSearch() {
       const existing = new Set(searchHits.filter(h => h.profileId).map(h => h.profileId));
       profiles.forEach(p => {
         if (existing.has(p.id)) return;
-        searchHits.push({ type: 'Профиль', title: p.name || ('@' + p.username), sub: '@' + p.username + (p.subtitle ? ' · ' + p.subtitle : ''), icon: '👤', color: '#eef2e4', profileId: p.id, profile: p, action: () => openPublicProfile(p) });
+        searchHits.push({ type: 'Профиль', title: p.name || ('@' + p.username), sub: '@' + p.username + (p.subtitle ? ' · ' + p.subtitle : ''), icon: '👤', color: 'var(--accent-soft)', profileId: p.id, profile: p, action: () => openPublicProfile(p) });
       });
       paintSearchResults(raw);
     });
